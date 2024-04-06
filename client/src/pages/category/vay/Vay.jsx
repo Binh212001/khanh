@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ProductItem from "../../../components/product/ProductItem";
 import Filter from "../../../components/Filter";
+import ProductItem from "../../../components/product/ProductItem";
 import { getProductByCategory } from "../../../redux/productAction";
 
 function Vay() {
-  const [pagination, setPagination] = useState({ page: 0, limit: 10 });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProductByCategory({...pagination , category:"ao"}));
-  }, [dispatch, pagination ]);
+    dispatch(getProductByCategory({ page: 0, limit: 24, category: "vay" }));
+  }, [dispatch]);
 
   const { products } = useSelector((state) => state.product);
 
@@ -18,7 +17,9 @@ function Vay() {
     <div className="my-[50px] container m-auto">
       <div>
         <div className="text-center font-bold my-12 ">
-          <h2 className="text-yellow-yody text-3xl">POLO YODY - THOẢI MÁI, TỰ TIN MỌI LÚC MỌI NƠI </h2>
+          <h2 className="text-yellow-yody text-3xl">
+            POLO YODY - THOẢI MÁI, TỰ TIN MỌI LÚC MỌI NƠI{" "}
+          </h2>
         </div>
 
         <div className="flex">
