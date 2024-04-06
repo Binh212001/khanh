@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TableCustom from "../../custom/TableCustom";
 import { getBills, getBillsByCus } from "../../redux/billAction";
-import { Button, Input, Pagination } from "antd";
+import { Button, Input, Modal, Pagination } from "antd";
 import billRest from "../../api/BillRest";
 import { SearchOutlined } from "@ant-design/icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,8 +11,20 @@ function Bill() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [currentPage, setCurrentPage] = useState(1);
   const [listBillSelect, setListBillSelect] = useState([]);
-  console.log("🚀 ~ Bill ~ listBillSelect:", listBillSelect);
   const [keyword, setKeyword] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const limit = 12;
   const { bills, count, billSearch } = useSelector((state) => state.bill);
@@ -50,6 +62,7 @@ function Bill() {
       const data = await billRest.delete(listBillSelect);
       toast(data);
       dispatch(getBills({ limit, page: currentPage - 1 }));
+      setIsModalOpen(false);
     } catch (error) {
       console.log("🚀 ~ deleteBill ~ error:", error);
     }
@@ -72,18 +85,27 @@ function Bill() {
   }
   return (
     <div className="container m-auto">
+      <Modal
+        title="Xác nhận xóa đơn hàng."
+        open={isModalOpen}
+        onOk={deleteBill}
+        onCancel={handleCancel}
+        visible={isModalOpen}
+      >
+        <p>Bạn có muốn xóa những đơn hàng này không.</p>
+      </Modal>
       <ToastContainer />
       <div className="flex justify-between items-center my-4">
         <div className="flex gap-2">
           <Button
             disabled={listBillSelect.length > 0 ? false : true}
-            onClick={() => deleteBill()}
+            onClick={showModal}
           >
             Xóa hóa đơn
           </Button>
           <Button
             disabled={listBillSelect.length > 0 ? false : true}
-            onClick={() => exportBill()}
+            onClick={exportBill()}
           >
             Xuất hóa đơn
           </Button>

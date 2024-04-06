@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Row, Typography } from "antd";
+import { Button, Col, Divider, Modal, Row, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,8 +14,21 @@ function ProductDetail() {
   const [size, setSize] = useState("SM");
   const [selectSize, setSelectSize] = useState(0);
   const [product, setProduct] = useState({});
-  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log("🚀 ~ ProductDetail ~ isModalOpen:", isModalOpen);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -68,6 +81,7 @@ function ProductDetail() {
         size,
       });
       toast("Mua hàng thành công");
+      setIsModalOpen(false);
     } catch (error) {
       toast("Error server");
     }
@@ -144,8 +158,18 @@ function ProductDetail() {
             </div>
             <div>
               <div className="mb-2">Total: {qty * product.price}vnd</div>
-              <Button onClick={() => buyProduct()}>Mua hàng</Button>
             </div>
+
+            <Button onClick={showModal}>Open Modal</Button>
+            <Modal
+              title="Xác nhận mua hàng"
+              open={isModalOpen}
+              onOk={buyProduct}
+              onCancel={handleCancel}
+              visible={isModalOpen}
+            >
+              <p>Bạn có muốn mua đơn hàng này không ?</p>
+            </Modal>
           </Col>
         </Row>
         <Divider orientation="left" className="comment" plain={false}>
