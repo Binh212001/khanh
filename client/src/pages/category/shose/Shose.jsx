@@ -8,7 +8,7 @@ function Shose() {
   const page = 1;
   const limit = 12;
   useEffect(() => {
-    dispatch(getProductByCategory({ page, limit, category: "ao" }));
+    dispatch(getProductByCategory({ page, limit, category: "giaydep" }));
   }, [dispatch]);
 
   const { products } = useSelector((state) => state.product);

@@ -5,7 +5,7 @@ const routeConfig = {
   ao: "/category/ao",
   quan: "/category/quan",
   vay: "/category/vay",
-  shose: "/category/giay-dep",
+  shose: "/category/giaydep",
   search: "product/search/:name",
   auth: "/auth",
   managementHome: "/management/home/",

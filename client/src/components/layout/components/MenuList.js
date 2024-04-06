@@ -14,7 +14,7 @@ export const listMenu = [
   },
   {
     displayName: "Giày dép",
-    to: "/giay-dep",
+    to: "/giaydep",
   },
 ];
 
