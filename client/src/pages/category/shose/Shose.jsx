@@ -5,10 +5,8 @@ import Filter from "../../../components/Filter";
 import { getProductByCategory } from "../../../redux/productAction";
 function Shose() {
   const dispatch = useDispatch();
-  const page = 1;
-  const limit = 12;
   useEffect(() => {
-    dispatch(getProductByCategory({ page, limit, category: "giaydep" }));
+    dispatch(getProductByCategory({ page: 0, limit: 24, category: "giaydep" }));
   }, [dispatch]);
 
   const { products } = useSelector((state) => state.product);
