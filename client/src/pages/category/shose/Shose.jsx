@@ -4,12 +4,12 @@ import ProductItem from "../../../components/product/ProductItem";
 import Filter from "../../../components/Filter";
 import { getProductByCategory } from "../../../redux/productAction";
 function Shose() {
-  const [pagination, setPagination] = useState({ page: 0, limit: 10 });
   const dispatch = useDispatch();
-
+  const page = 1;
+  const limit = 12;
   useEffect(() => {
-    dispatch(getProductByCategory({...pagination , category:"ao"}));
-  }, [dispatch, pagination ]);
+    dispatch(getProductByCategory({ page, limit, category: "ao" }));
+  }, [dispatch]);
 
   const { products } = useSelector((state) => state.product);
 
@@ -17,7 +17,9 @@ function Shose() {
     <div className="my-[50px] container m-auto">
       <div>
         <div className="text-center font-bold my-12 ">
-          <h2 className="text-yellow-yody text-3xl">POLO YODY - THOẢI MÁI, TỰ TIN MỌI LÚC MỌI NƠI </h2>
+          <h2 className="text-yellow-yody text-3xl">
+            POLO YODY - THOẢI MÁI, TỰ TIN MỌI LÚC MỌI NƠI{" "}
+          </h2>
         </div>
 
         <div className="flex">

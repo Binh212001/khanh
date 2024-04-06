@@ -33,6 +33,17 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/active")
+    public ResponseEntity< Response<List<Product>>> getAllProductsActive(@RequestParam("page") int page , @RequestParam("limit") int limit) {
+        try {
+            List<Product> products = productService.getProductsActive(page, limit);
+            long count = productService.getCount();
+            return  ResponseEntity.status(HttpStatus.OK).body(new Response<List<Product>>(count,products,"Ok"));
+        }catch (Exception e ){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<List<Product>>(null,e.getMessage()));
+        }
+    }
+
     @GetMapping("/search")
     public ResponseEntity< Response<List<Product>>> getProductsByName(@RequestParam("page") int page , @RequestParam("limit") int limit ,
                                                                       @RequestParam("name") String name) {

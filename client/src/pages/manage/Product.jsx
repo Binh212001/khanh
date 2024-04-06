@@ -1,5 +1,9 @@
-import { EditOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Pagination } from "antd";
+import {
+  EditOutlined,
+  SearchOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { Button, Input, Pagination, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,7 +29,7 @@ function Product() {
 
   const [current, setCurrent] = useState(1);
   const limit = 12;
-  const { products, count, productSearch } = useSelector(
+  const { products, count, productSearch, loading } = useSelector(
     (state) => state.product
   );
 
@@ -97,6 +101,16 @@ function Product() {
       </div>
     );
   }
+  if (loading) {
+    return (
+      <div
+        style={{ minHeight: "50vh" }}
+        className="flex flex-col justify-center items-center text-center m-auto"
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
+      </div>
+    );
+  }
   return (
     <div className="container m-auto">
       <ToastContainer />
@@ -127,26 +141,26 @@ function Product() {
         {productSearch.length > 0
           ? productSearch.map((p) => {
               return (
-                <tr key={p.pid}>
+                <tr key={p?.pid}>
                   <td className="text-center">
                     <input
                       type="checkbox"
-                      value={p.pid}
+                      value={p?.pid}
                       name="pid"
                       onChange={(e) => {
                         selectProduct(e);
                       }}
                     />
                   </td>
-                  <td className="text-center">{p.pid}</td>
-                  <td className="text-center">{p.title}</td>
-                  <td className="text-center">{p.price}</td>
-                  <td className="text-center">{p.description}</td>
+                  <td className="text-center">{p?.pid}</td>
+                  <td className="text-center">{p?.title}</td>
+                  <td className="text-center">{p?.price}</td>
+                  <td className="text-center">{p?.description}</td>
                   <td className="text-center">
-                    <a href={`${BASEURL}/images/${p.image}`}>{p.image}</a>
+                    <a href={`${BASEURL}/image/${p?.image}`}>{p?.image}</a>
                   </td>
                   <td className="text-center">
-                    {p.size.map((c, index) => {
+                    {p?.size.map((c, index) => {
                       return (
                         <span
                           key={index}
@@ -158,7 +172,7 @@ function Product() {
                     })}
                   </td>
                   <td className="text-center">
-                    {p.color.map((c) => {
+                    {p?.color.map((c) => {
                       return (
                         <span className="mr-2 bg-btn-filter p-2 rounded-md">
                           {c.name}
@@ -167,7 +181,7 @@ function Product() {
                     })}
                   </td>
                   <td className="text-center">
-                    {p.active ? "Đang bán" : "Ngừng bán"}
+                    {p?.active ? "Đang bán" : "Ngừng bán"}
                   </td>
                   <td className="text-center">
                     <EditOutlined
@@ -181,26 +195,26 @@ function Product() {
             })
           : products.map((p) => {
               return (
-                <tr key={p.pid}>
+                <tr key={p?.pid}>
                   <td className="text-center">
                     <input
                       type="checkbox"
-                      value={p.pid}
+                      value={p?.pid}
                       name="pid"
                       onChange={(e) => {
                         selectProduct(e);
                       }}
                     />
                   </td>
-                  <td className="text-center">{p.pid}</td>
-                  <td className="text-center">{p.title}</td>
-                  <td className="text-center">{p.price}</td>
-                  <td className="text-center">{p.description}</td>
+                  <td className="text-center">{p?.pid}</td>
+                  <td className="text-center">{p?.title}</td>
+                  <td className="text-center">{p?.price}</td>
+                  <td className="text-center">{p?.description}</td>
                   <td className="text-center">
-                    <a href={`${BASEURL}/images/${p.image}`}>{p.image}</a>
+                    <a href={`${BASEURL}/image/${p?.image}`}>{p?.image}</a>
                   </td>
                   <td className="text-center">
-                    {p.size.map((c, index) => {
+                    {p?.size.map((c, index) => {
                       return (
                         <span
                           key={index}
@@ -212,7 +226,7 @@ function Product() {
                     })}
                   </td>
                   <td className="text-center">
-                    {p.color.map((c) => {
+                    {p?.color.map((c) => {
                       return (
                         <span className="mr-2 bg-btn-filter p-2 rounded-md">
                           {c.name}
@@ -221,7 +235,7 @@ function Product() {
                     })}
                   </td>
                   <td className="text-center">
-                    {p.active ? "Đang bán" : "Ngừng bán"}
+                    {p?.active ? "Đang bán" : "Ngừng bán"}
                   </td>
                   <td className="text-center">
                     <EditOutlined

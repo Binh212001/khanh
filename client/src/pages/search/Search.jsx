@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Filter from "../../components/Filter";
@@ -6,25 +6,27 @@ import ProductItem from "../../components/product/ProductItem";
 import { getProductByName } from "../../redux/productAction";
 
 export default function Search() {
-  const [pagination, setPagination] = useState({ page: 0, limit: 10 });
   const { name } = useParams();
 
   const dispatch = useDispatch();
   useEffect(() => {
     const params = {
-      ...pagination,
+      page: 0,
+      limit: 12,
       name: name.toLowerCase(),
     };
 
     dispatch(getProductByName(params));
-  }, [name, pagination, dispatch]);
+  }, [name, dispatch]);
   const { products } = useSelector((state) => state.product);
 
   return (
     <div className="my-[50px] container m-auto">
       <div>
         <div className="text-center font-bold my-12 ">
-          <h2 className="text-yellow-yody text-3xl">POLO YODY - THOẢI MÁI, TỰ TIN MỌI LÚC MỌI NƠI </h2>
+          <h2 className="text-yellow-yody text-3xl">
+            POLO YODY - THOẢI MÁI, TỰ TIN MỌI LÚC MỌI NƠI{" "}
+          </h2>
         </div>
 
         <div className="flex">

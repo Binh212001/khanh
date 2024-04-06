@@ -2,6 +2,7 @@ package org.example.shop.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,10 @@ public class Product {
     @JoinColumn(name = "userId")
     private Account seller;
     private  boolean active ;
+    @PrePersist
+    protected void onCreate() {
+        active = true;
+    }
 
 
 }

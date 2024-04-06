@@ -18,7 +18,7 @@ function Cart() {
   }, [user, dispatch]);
   const { bills } = useSelector((state) => state.bill);
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" style={{ minHeight: "50vh" }}>
       <div>
         <div className="container mx-auto p-4 grid grid-cols-4 gap-5">
           {bills.map((item) => (

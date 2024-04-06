@@ -10,7 +10,11 @@ function ProductItem({ data }) {
       <Link to={`/product/${data.pid}`}>
         <div className="flex rounded-[2px] flex-col w-full h-full card">
           <div className="object-cover">
-            <img src={`${BASEURL}images/${data.image}`} alt={data.title} className="block w-full h-auto" />
+            <img
+              src={`${BASEURL}image/${data.image}`}
+              alt={data.title}
+              className="block w-full h-auto"
+            />
           </div>
           <div className="flex-1">
             <h3 className="font-bold p-2">{data.title}</h3>

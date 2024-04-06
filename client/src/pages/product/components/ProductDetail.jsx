@@ -1,10 +1,10 @@
 import { Button, Col, Divider, Modal, Row, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import baseApi, { BASEURL } from "../../../api/BaseApi";
 import billRest from "../../../api/BillRest";
-import { ToastContainer, toast } from "react-toastify";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -16,7 +16,6 @@ function ProductDetail() {
   const [product, setProduct] = useState({});
   const { user } = useSelector((state) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log("🚀 ~ ProductDetail ~ isModalOpen:", isModalOpen);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -94,7 +93,7 @@ function ProductDetail() {
         <Row>
           <Col className="flex justify-center" xs={24} sm={12} md={12}>
             <img
-              src={`${BASEURL}images/${product.image}`}
+              src={`${BASEURL}image/${product.image}`}
               alt="anh"
               className="h-[300px] w-auto"
             />
@@ -160,7 +159,7 @@ function ProductDetail() {
               <div className="mb-2">Total: {qty * product.price}vnd</div>
             </div>
 
-            <Button onClick={showModal}>Open Modal</Button>
+            <Button onClick={showModal}>Mua hàng</Button>
             <Modal
               title="Xác nhận mua hàng"
               open={isModalOpen}

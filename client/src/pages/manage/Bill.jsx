@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TableCustom from "../../custom/TableCustom";
 import { getBills, getBillsByCus } from "../../redux/billAction";
-import { Button, Input, Modal, Pagination } from "antd";
+import { Button, Input, Modal, Pagination, Spin } from "antd";
 import billRest from "../../api/BillRest";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
 import { ToastContainer, toast } from "react-toastify";
 
 function Bill() {
@@ -27,7 +27,9 @@ function Bill() {
   };
 
   const limit = 12;
-  const { bills, count, billSearch } = useSelector((state) => state.bill);
+  const { bills, count, billSearch, loading } = useSelector(
+    (state) => state.bill
+  );
 
   const dispatch = useDispatch();
 
@@ -83,6 +85,17 @@ function Bill() {
       </div>
     );
   }
+
+  if (loading) {
+    return (
+      <div
+        style={{ minHeight: "50vh" }}
+        className="flex flex-col justify-center items-center text-center m-auto"
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
+      </div>
+    );
+  }
   return (
     <div className="container m-auto">
       <Modal
@@ -105,7 +118,7 @@ function Bill() {
           </Button>
           <Button
             disabled={listBillSelect.length > 0 ? false : true}
-            onClick={exportBill()}
+            onClick={exportBill}
           >
             Xuất hóa đơn
           </Button>

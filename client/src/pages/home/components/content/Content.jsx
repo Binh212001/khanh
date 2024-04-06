@@ -1,19 +1,21 @@
+import { LoadingOutlined } from "@ant-design/icons";
+import { Pagination, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ProductItem from "../../../../components/product/ProductItem";
-import { getProduct } from "../../../../redux/productAction";
 import Filter from "../../../../components/Filter";
-import { Pagination } from "antd";
+import ProductItem from "../../../../components/product/ProductItem";
+import { getProductActive } from "../../../../redux/productAction";
 
 function Content() {
   const [current, setCurrent] = useState(1);
   const limit = 12;
   const dispatch = useDispatch();
-  const { products, count } = useSelector((state) => state.product);
+  const { products, count, loading } = useSelector((state) => state.product);
+  console.log("🚀 ~ Content ~ loading:", loading);
 
   useEffect(() => {
     dispatch(
-      getProduct({
+      getProductActive({
         limit,
         page: current - 1,
       })
@@ -37,11 +39,24 @@ function Content() {
           <div style={{ width: "20%", height: "300px" }}>
             <Filter />
           </div>
-          <div style={{ width: "80%" }} className="grid-container">
-            {products?.map((item, index) => (
-              <ProductItem key={item.pid} data={item} />
-            ))}
-          </div>
+          {loading ? (
+            <div
+              style={{ minHeight: "50vh" }}
+              className="flex flex-col justify-center items-center text-center m-auto"
+            >
+              <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />}
+              />
+            </div>
+          ) : (
+            <>
+              <div style={{ width: "80%" }} className="grid-container">
+                {products?.map((item, index) => (
+                  <ProductItem key={item.pid} data={item} />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div className="text-center mt-4">

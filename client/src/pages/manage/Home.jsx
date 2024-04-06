@@ -1,16 +1,17 @@
+import { LoadingOutlined } from "@ant-design/icons";
+import { Col, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import LineChart from "./LineChart ";
 import productRest from "../../api/ProductRest";
-import { Col, Row } from "antd";
+import LineChart from "./LineChart ";
 
 function Home() {
   const [label, setLaBel] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [dataChartQty, setDataChartQty] = useState([]);
   const [dataChartRevenue, setDataChartRevenue] = useState([]);
   const [sumQty, setSumQty] = useState(0);
   const [sumRevenue, setSumRevenue] = useState(0);
 
-  const [mode, setMode] = useState(false);
   useEffect(() => {
     const getTopSelleing = async () => {
       try {
@@ -26,12 +27,13 @@ function Home() {
         });
         setSumQty(sum1);
         setSumRevenue(sum2);
+        setLoading(false);
       } catch (error) {
         alert(error.message);
       }
     };
     getTopSelleing();
-  }, [mode]);
+  }, []);
   const dataQty = {
     labels: label,
     datasets: [
@@ -66,6 +68,17 @@ function Home() {
         <h3 className="font-bold text-yellow-yody text-3xl">
           Bạn không có quyền truy cập trang này.
         </h3>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div
+        style={{ minHeight: "50vh" }}
+        className="flex flex-col justify-center items-center text-center m-auto"
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
       </div>
     );
   }

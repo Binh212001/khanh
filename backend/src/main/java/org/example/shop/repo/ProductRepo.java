@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductRepo extends JpaRepository<Product, String> {
     @Query(value = "select * from products", nativeQuery = true)
     List<Product> getProducts(Pageable pageable);
-    @Query(value = "select * from products where LOWER(products.title) like %:title%", nativeQuery = true)
+    @Query(value = "select * from products where LOWER(products.title) like %:title% and active=true", nativeQuery = true)
 
     List<Product> getProductByTitle(Pageable pageable , String title);
 
@@ -23,7 +23,7 @@ public interface ProductRepo extends JpaRepository<Product, String> {
     @Query(value = "select * from products where products.user_id = :userId", nativeQuery = true)
 
     List<Product> getProductBySeller(Pageable pageable , String userId);
-    @Query(value = "select * from products where products.category = :category", nativeQuery = true)
+    @Query(value = "select * from products where products.category = :category and products.active=true", nativeQuery = true)
     List<Product> getByCategory(Pageable pageable , String category);
 
     long count();
@@ -37,4 +37,6 @@ public interface ProductRepo extends JpaRepository<Product, String> {
     List<Object[]> findTop10ByTotalQuantitySold();
 
     List<Product> findByPriceBetween(double minPrice, double maxPrice);
+    @Query(value = "select * from products where active = true", nativeQuery = true)
+    List<Product> getProductActive(Pageable pageable);
 }

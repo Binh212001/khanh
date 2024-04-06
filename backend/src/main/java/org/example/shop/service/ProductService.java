@@ -26,4 +26,6 @@ public interface ProductService {
     List<TopSellingProductDTO> getTopSellingProducts();
 
     List<Product> findProductsByPriceRange(double minPrice, double maxPrice);
+
+    List<Product> getProductsActive(int page, int limit) throws  Exception;
 }

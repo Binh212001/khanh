@@ -41,7 +41,7 @@ function ProductSearch() {
         <td className="text-center">{product?.price}</td>
         <td className="text-center">{product?.description}</td>
         <td className="text-center">
-          <a href={`${BASEURL}/images/${product?.image}`}>{product?.image}</a>
+          <a href={`${BASEURL}/image/${product?.image}`}>{product?.image}</a>
         </td>
         <td className="text-center">
           {product?.size.map((c) => {

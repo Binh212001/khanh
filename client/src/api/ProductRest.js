@@ -4,6 +4,10 @@ const path = "/product";
 const productRest = {
   getProducts: (params) => {
     const url = `${path}`;
+    return baseApi.get(url, { params });
+  },
+  getProductActive: (params) => {
+    const url = `${path}/active`;
 
     return baseApi.get(url, { params });
   },

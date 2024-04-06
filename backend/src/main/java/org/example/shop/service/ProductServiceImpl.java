@@ -175,4 +175,10 @@ public class ProductServiceImpl implements  ProductService {
         return productRepo.findByPriceBetween(minPrice, maxPrice);
     }
 
+    @Override
+    public List<Product> getProductsActive(int page, int limit) throws Exception {
+        Pageable pageable = PageRequest.of(page, limit);
+        return  productRepo.getProductActive(pageable);
+    }
+
 }
