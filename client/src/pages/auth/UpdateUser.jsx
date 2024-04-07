@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import authRest from "../../api/AuthRest";
+import { update } from "../../redux/AuthSlice";
 
 function UpdateUser() {
   const { userId } = useParams();
   // const [file, setFile] = useState(null);
   const [infUser, setInfUser] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUser = async () => {
@@ -28,7 +31,8 @@ function UpdateUser() {
 
   const updateUser = async () => {
     try {
-      await authRest.update(infUser);
+      const data = await authRest.update(infUser);
+      dispatch(update(data));
       toast("Cập nhật thông tin thành công.");
     } catch (error) {
       console.log("🚀 ~ updateUser ~ error:", error);

@@ -33,39 +33,31 @@ function Header() {
     <Menu
       items={[
         {
-          label:
-            user?.userId || user?.data?.userId ? (
-              <span
-                onClick={() => {
-                  handelLogout();
-                }}
-              >
-                Dang Xuat
-              </span>
-            ) : null,
+          label: user?.userId ? (
+            <span
+              onClick={() => {
+                handelLogout();
+              }}
+            >
+              Đăng xuất
+            </span>
+          ) : null,
           key: "0",
         },
         {
-          label:
-            user?.userId || user?.data?.userId ? (
-              <Link to={`/user/update/${user?.data?.userId}`}>
-                Cập nhật thông tin
-              </Link>
-            ) : null,
+          label: user?.userId ? (
+            <Link to={`/user/update/${user?.userId}`}>Cập nhật thông tin</Link>
+          ) : null,
           key: "1",
         },
         {
-          label:
-            user?.userId || !user?.data?.userId ? (
-              <Link to={`/auth`}>Đăng nhập</Link>
-            ) : null,
+          label: !user?.userId ? <Link to={`/auth`}>Đăng nhập</Link> : null,
           key: "5",
         },
         {
-          label:
-            user?.sellers || user?.data?.sellers ? (
-              <Link to={`/management/home`}>Quản lý</Link>
-            ) : null,
+          label: user?.sellers ? (
+            <Link to={`/management/home`}>Quản lý</Link>
+          ) : null,
           key: "2",
         },
       ]}

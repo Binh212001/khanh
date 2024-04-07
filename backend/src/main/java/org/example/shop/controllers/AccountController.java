@@ -31,31 +31,31 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response<AccountModel>> login(@RequestBody Account account) throws  Exception{
+    public ResponseEntity<AccountModel> login(@RequestBody Account account) throws  Exception{
         try {
             AccountModel user = accountService.login(account);
         if(user==null){
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<AccountModel>(user,"Tài khoản hoặc mật khẩu không chính xác"));
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-            return  ResponseEntity.status(HttpStatus.OK).body(new Response<AccountModel>(user,"Đăng nhập thành công"));
+            return  ResponseEntity.status(HttpStatus.OK).body(user);
 
         }catch (Exception e){
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<AccountModel>(null,e.getMessage()));
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Response<Boolean>> update(@RequestBody Account account) throws  Exception{
+    public ResponseEntity<AccountModel> update(@RequestBody Account account) throws  Exception{
         try {
-            Boolean updated = accountService.update(account, account.getUserId());
-            if(updated==null){
-                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<Boolean>(null,"Tài khoản không tồn tại."));
+            AccountModel acc = accountService.update(account, account.getUserId());
+            if(acc==null){
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            return  ResponseEntity.status(HttpStatus.OK).body(new Response<Boolean>(updated,"cập nhật hành công"));
+            return  ResponseEntity.status(HttpStatus.OK).body(acc);
 
         }catch (Exception e){
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<Boolean>(false,e.getMessage()));
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

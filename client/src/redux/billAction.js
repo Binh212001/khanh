@@ -6,6 +6,7 @@ export const getBillByUserId = createAsyncThunk(
   async (params) => {
     try {
       const res = await billRest.getBillByUserId(params);
+      console.log("🚀 ~ res:", res);
       return res;
     } catch (error) {
       console.log("🚀 ~ getProduct ~ error:", error);

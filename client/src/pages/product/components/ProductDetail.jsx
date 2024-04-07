@@ -59,11 +59,11 @@ function ProductDetail() {
   };
 
   const buyProduct = async () => {
-    if (!user?.data?.userId) {
+    if (!user?.userId) {
       alert("Bạn cần đăng nhập");
       return;
     }
-    if (!user?.data?.phone || !user?.data?.addressDetail) {
+    if (!user?.phone || !user?.addressDetail) {
       alert("Bạn cần cập nhật sdt và dịa chỉ.");
       return;
     }
@@ -71,7 +71,7 @@ function ProductDetail() {
       await billRest.create({
         product,
         quantity: qty,
-        account: user.data,
+        account: user,
         color,
         size,
       });

@@ -28,7 +28,7 @@ public class AccountServiceImpl implements  AccountService {
     }
 
     @Override
-    public Boolean update(Account account, String userId) throws Exception {
+    public AccountModel update(Account account, String userId) throws Exception {
         try {
             Optional<Account>  user = accountRepo.findById(userId);
             if(user.isPresent()){
@@ -40,9 +40,10 @@ public class AccountServiceImpl implements  AccountService {
                 user.get().setLastName(account.getLastName());
                 user.get().setSellers(account.isSellers());
                 accountRepo.save(user.get());
-                return  true;
+                AccountModel model = mapToModel(user.get());
+                return  model;
             }
-            return  false;
+            return  null;
         }catch (Exception e){
             throw  new Exception(e.getMessage());
         }

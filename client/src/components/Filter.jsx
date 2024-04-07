@@ -1,5 +1,4 @@
-import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { getProductByPrice } from "../redux/productAction";
 
@@ -30,8 +29,7 @@ const Filter = () => {
       value: [700000, 200000000],
     },
   ];
-  const [size, setSize] = useState(false);
-  const [color, setColor] = useState(false);
+
   const dispatch = useDispatch();
 
   const filterByPrice = (price) => {
@@ -39,47 +37,6 @@ const Filter = () => {
   };
   return (
     <div className="pr-12">
-      <div>
-        <div className="flex justify-between mb-2">
-          <h4>Kích thước</h4>
-          {!size ? (
-            <DownOutlined onClick={() => setSize(!size)} />
-          ) : (
-            <UpOutlined onClick={() => setSize(!size)} />
-          )}
-        </div>
-        {size ? (
-          <div className="flex gap-4">
-            <span className="bg-btn-filter px-4 py-2 rounded-md">SM</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">M</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">L</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">XL</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">2XL</span>
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
-      <div>
-        <div className="flex justify-between">
-          <h4>Màu sắc</h4>
-          {!color ? (
-            <DownOutlined onClick={() => setColor(!color)} />
-          ) : (
-            <UpOutlined onClick={() => setColor(!color)} />
-          )}
-        </div>
-        {color ? (
-          <div className="flex gap-4">
-            <span className="bg-btn-filter px-4 py-2 rounded-md">Xanh</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">Do</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">Den</span>
-            <span className="bg-btn-filter px-4 py-2 rounded-md">Trang</span>
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
       <div>
         <div className="flex justify-between">
           <h4>Khoảng giá (VNĐ)</h4>
@@ -89,6 +46,7 @@ const Filter = () => {
             <div className="flex gap-2" key={index}>
               <input
                 type="radio"
+                ó
                 name="price"
                 value={data.value}
                 onChange={() => {

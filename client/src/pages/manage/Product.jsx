@@ -89,7 +89,7 @@ function Product() {
     setMode(false);
   };
 
-  if (!user?.data?.sellers) {
+  if (!user?.sellers) {
     return (
       <div
         className="text-center align-middle flex flex-col justify-center"
@@ -116,6 +116,8 @@ function Product() {
       <ToastContainer />
       {showForm ? (
         <ProductForm
+          page={current - 1}
+          limit={limit}
           mode={mode}
           closeForm={closeForm}
           product={productSelect}

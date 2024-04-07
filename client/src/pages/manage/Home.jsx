@@ -59,7 +59,7 @@ function Home() {
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
-  if (!user?.data?.sellers) {
+  if (!user?.sellers) {
     return (
       <div
         className="text-center align-middle flex flex-col justify-center"

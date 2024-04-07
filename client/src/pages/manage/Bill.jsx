@@ -69,7 +69,7 @@ function Bill() {
     dispatch(getBillsByCus(keyword));
   };
 
-  if (!user?.data?.sellers) {
+  if (!user?.sellers) {
     return (
       <div
         className="text-center align-middle flex flex-col justify-center"
@@ -147,7 +147,7 @@ function Bill() {
                   <td className="text-center">{b.id}</td>
                   <td className="text-center">{b.product.title}</td>
                   <td className="text-center">
-                    {b.account.firstName + b.account.lastName}
+                    {b.account?.firstName + b.account?.lastName}
                   </td>
                   <td className="text-center">{b.product.price}</td>
                   <td className="text-center">{b.quantity}</td>
@@ -173,7 +173,7 @@ function Bill() {
                   <td className="text-center">{b.id}</td>
                   <td className="text-center">{b.product.title}</td>
                   <td className="text-center">
-                    {b.account.firstName + b.account.lastName}
+                    {b.account?.firstName + b.account?.lastName}
                   </td>
                   <td className="text-center">{b.product.price}</td>
                   <td className="text-center">{b.quantity}</td>

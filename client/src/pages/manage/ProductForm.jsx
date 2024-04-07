@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import productRest from "../../api/ProductRest";
+import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import productRest from "../../api/ProductRest";
 import uploadFile from "../../api/UploadFile";
+import { getProductByUserId } from "../../redux/productAction";
 
-function ProductForm({ mode, product, closeForm }) {
+function ProductForm({ mode, product, closeForm, page, limit }) {
   const [user, setUser] = useState();
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
@@ -16,6 +18,7 @@ function ProductForm({ mode, product, closeForm }) {
     formState: { errors },
   } = useForm();
 
+  const dispatch = useDispatch();
   const onSubmit = async (data) => {
     if (product) {
       try {
@@ -59,6 +62,7 @@ function ProductForm({ mode, product, closeForm }) {
             toast("Thêm sản phẩm thành công");
           }, 300);
           reset();
+          dispatch(getProductByUserId({ limit, page, useId: user.useId }));
         }
       } catch (error) {
         console.log("🚀 ~ onSubmit ~ error:", error);
