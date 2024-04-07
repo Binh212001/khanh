@@ -17,6 +17,7 @@ function Cart() {
     );
   }, [user, dispatch]);
   const { bills } = useSelector((state) => state.bill);
+  console.log("🚀 ~ Cart ~ bills:", bills);
   return (
     <div className="flex justify-center" style={{ minHeight: "50vh" }}>
       <div>
@@ -38,6 +39,12 @@ function Cart() {
                 <div>
                   <p className="font-bold">Ngày:</p>
                   <p>{item.createdAt}</p>
+                </div>
+              </div>
+              <div className="flex justify-between mb-4">
+                <div>
+                  <p className="font-bold">Đại chỉ:</p>
+                  <p>{item?.account?.addressDetail}</p>
                 </div>
               </div>
               <div className="flex justify-between mb-4">
