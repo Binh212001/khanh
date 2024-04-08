@@ -46,7 +46,6 @@ const Filter = () => {
             <div className="flex gap-2" key={index}>
               <input
                 type="radio"
-                ó
                 name="price"
                 value={data.value}
                 onChange={() => {

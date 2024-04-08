@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import productRest from "../../api/ProductRest";
 import uploadFile from "../../api/UploadFile";
 import { getProductByUserId } from "../../redux/productAction";
 
 function ProductForm({ mode, product, closeForm, page, limit }) {
-  const [user, setUser] = useState();
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
-  }, []);
+  const { user } = useSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -20,6 +17,7 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
 
   const dispatch = useDispatch();
   const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data);
     if (product) {
       try {
         const fileExtension = data?.image[0].name
@@ -53,7 +51,7 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
         ) {
           toast("Định dạng file phải  là png, jpg, jpeg, gif, webp, tiff");
         } else {
-          await productRest.create({ ...data, id, sellerId: user.data.userId });
+          await productRest.create({ ...data, id, sellerId: user.userId });
           const formData = new FormData();
           formData.append("file", data.image[0]);
           formData.append("productId", id);
@@ -61,8 +59,9 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
           setTimeout(() => {
             toast("Thêm sản phẩm thành công");
           }, 300);
+          console.log("🚀 ~ onSubmit ~  user?.userId:", user.userId);
           reset();
-          dispatch(getProductByUserId({ limit, page, useId: user.useId }));
+          dispatch(getProductByUserId({ limit, page, useId: user.userId }));
         }
       } catch (error) {
         console.log("🚀 ~ onSubmit ~ error:", error);
