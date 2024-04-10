@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ProductItem from "../../../components/product/ProductItem";
 import Filter from "../../../components/Filter";
+import ProductItem from "../../../components/product/ProductItem";
 import { getProductByCategory } from "../../../redux/productAction";
 function Shose() {
   const dispatch = useDispatch();
