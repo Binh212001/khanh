@@ -87,6 +87,12 @@ function Cart() {
               </div>
               <div className="flex justify-between mb-4">
                 <div>
+                  <p className="font-bold">SDT:</p>
+                  <p>{item?.account?.phone}</p>
+                </div>
+              </div>
+              <div className="flex justify-between mb-4">
+                <div>
                   <p className="font-bold">Đại chỉ:</p>
                   <p>{item?.account?.addressDetail}</p>
                 </div>

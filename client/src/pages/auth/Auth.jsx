@@ -80,26 +80,27 @@ function Auth() {
 
           {register ? (
             <>
-              <Form.Item
-                label="Nhập lại  mật khẩu"
-                name="confirmPassword"
-                dependencies={["password"]}
-                rules={[
-                  ,
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error("Xác nhận mật khẩu phải trùng với mật khẩu.")
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
+             <Form.Item
+  label="Nhập lại mật khẩu"
+  name="confirmPassword"
+  dependencies={["password"]}
+  rules={[
+    { required: true, message: "Vui lòng nhập lại mật khẩu!" },
+    ({ getFieldValue }) => ({
+      validator(_, value) {
+        if (!value || getFieldValue("password") === value) {
+          return Promise.resolve();
+        }
+        return Promise.reject(
+          new Error("Xác nhận mật khẩu phải trùng với mật khẩu.")
+        );
+      },
+    }),
+  ]}
+>
+  <Input.Password />
+</Form.Item>
+
 
               <Form.Item
                 label="Họ"

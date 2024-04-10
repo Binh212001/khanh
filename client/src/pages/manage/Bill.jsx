@@ -157,6 +157,8 @@ function Bill() {
                   <td className="text-center">{b.size}</td>
                   <td className="text-center">{b.color}</td>
                   <td className="text-center">{b.createdAt}</td>
+                  <td className="text-center">{b?.account?.addressDetail}</td>
+                  <td className="text-center">{b?.account?.phone}</td>
                 </tr>
               );
             })
@@ -183,6 +185,8 @@ function Bill() {
                   <td className="text-center">{b.size}</td>
                   <td className="text-center">{b.color}</td>
                   <td className="text-center">{b.createdAt}</td>
+                  <td className="text-center">{b?.account?.addressDetail}</td>
+                  <td className="text-center">{b?.account?.phone}</td>
                 </tr>
               );
             })}
@@ -210,6 +214,8 @@ const col = [
   "Kích cỡ",
   "Màu sắc",
   "Ngày bán",
+  "SDT",
+  "Dia chi"
 ];
 
 export default Bill;
