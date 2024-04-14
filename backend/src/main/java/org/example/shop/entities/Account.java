@@ -28,6 +28,7 @@ public class Account {
     private String avatar;
     private String fullName;
     private boolean isSellers;
+    private boolean active;
 
     @PrePersist
     protected void onCreate() {

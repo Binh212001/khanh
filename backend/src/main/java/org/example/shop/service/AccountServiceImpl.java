@@ -1,11 +1,15 @@
 package org.example.shop.service;
 
 import org.example.shop.entities.Account;
+import org.example.shop.entities.Product;
 import org.example.shop.models.AccountModel;
 import org.example.shop.repo.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,7 +56,7 @@ public class AccountServiceImpl implements  AccountService {
     @Override
     public AccountModel login(Account account) throws Exception {
         try {
-            Optional<Account>  user = accountRepo.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+            Optional<Account>  user = accountRepo.findByUsernameAndPasswordAndActive(account.getUsername(), account.getPassword(),true);
             if(user.isEmpty()){
                 return  null;
             }
@@ -67,6 +71,41 @@ public class AccountServiceImpl implements  AccountService {
         Optional<Account> u = accountRepo.findById(userId);
         AccountModel ac = mapToModel(u.get());
         return ac;
+    }
+
+    @Override
+    public List<Account> getAccount(int page, int limit) {
+            Pageable pageable = PageRequest.of(page, limit);
+            return  accountRepo.getAccounts(pageable);
+
+    }
+
+    @Override
+    public long getCount() {
+        return  accountRepo.count();
+    }
+
+    @Override
+    public List<Account> getAccByName(int page, int limit, String name) {
+
+            Pageable pageable = PageRequest.of(page, limit);
+            return  accountRepo.getAccByTitle(pageable,name);
+
+    }
+
+    @Override
+    public void lockAcc(List<String> ids) {
+        for (String id : ids){
+            try {
+                Optional<Account> p = accountRepo.findById(id);
+                p.get().setActive(!p.get().isActive());
+                accountRepo.save(p.get());
+            }
+            catch (Exception e){
+                return;
+            }
+
+        }
     }
 
     public  AccountModel mapToModel (Account account){

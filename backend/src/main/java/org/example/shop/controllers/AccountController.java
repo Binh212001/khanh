@@ -1,6 +1,7 @@
 package org.example.shop.controllers;
 
 import org.example.shop.entities.Account;
+import org.example.shop.entities.Product;
 import org.example.shop.models.AccountModel;
 import org.example.shop.service.AccountService;
 import org.example.shop.utils.Response;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -58,7 +61,16 @@ public class AccountController {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+    @PutMapping("/lock")
+    public ResponseEntity<Response<Boolean>> stopSale(@RequestBody List<String> id){
+        try {
+            accountService.lockAcc(id);
+            return  ResponseEntity.status(HttpStatus.OK).body(new Response<Boolean>(true,"OK"));
+        }catch (Exception e){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<Boolean>(false,e.getMessage()));
 
+        }
+    }
     @GetMapping("/getUser")
     public ResponseEntity<Response<AccountModel>> getUser(@RequestParam("userId") String  userId) throws  Exception{
         try {
@@ -68,6 +80,29 @@ public class AccountController {
         }catch (Exception e){
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<AccountModel>(null,e.getMessage()));
 
+        }
+    }
+
+    @GetMapping("/manage")
+    public ResponseEntity< Response<List<Account>>> getAllProducts(@RequestParam("page") int page , @RequestParam("limit") int limit) {
+        try {
+            List<Account> products = accountService.getAccount(page, limit);
+            long count = accountService.getCount();
+            return  ResponseEntity.status(HttpStatus.OK).body(new Response<List<Account>>(count,products,"Ok"));
+        }catch (Exception e ){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<List<Account>>(null,e.getMessage()));
+        }
+    }
+
+
+    @GetMapping("/manage/search")
+    public ResponseEntity< Response<List<Account>>> getCusByName(@RequestParam("page") int page , @RequestParam("limit") int limit ,
+                                                                      @RequestParam("name") String name) {
+        try {
+            List<Account> a = accountService.getAccByName(page, limit, name);
+            return  ResponseEntity.status(HttpStatus.OK).body(new Response<List<Account>>(0,a,"Ok"));
+        }catch (Exception e ){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<List<Account>>(null,e.getMessage()));
         }
     }
 
