@@ -39,7 +39,7 @@ function Bill() {
 
   const selectBill = (e) => {
     const data = e.target.value;
-    if (listCusSelect.includes(data)) {
+    if (listBillSelect.includes(data)) {
       const updatedList = listBillSelect.filter((item) => item !== data);
       setListBillSelect(updatedList);
     } else {
