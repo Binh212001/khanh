@@ -11,6 +11,7 @@ import Bill from "../pages/manage/Bill.jsx";
 import Home from "../pages/manage/Home";
 import Product from "../pages/manage/Product";
 import ProductSearch from "../pages/manage/ProductSearch.jsx";
+import Users from "../pages/manage/User.jsx";
 import ProductDetail from "../pages/product/components/ProductDetail";
 import Search from "../pages/search/Search";
 
@@ -74,6 +75,11 @@ const routes = [
   {
     path: routeConfig.managementProduct,
     element: <Product />,
+    layout: "management",
+  },
+  {
+    path: routeConfig.managementUser,
+    element: <Users />,
     layout: "management",
   },
   {

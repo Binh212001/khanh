@@ -32,4 +32,8 @@ export const managementMenu = [
     displayName: "Hóa đơn",
     to: "bill",
   },
+  {
+    displayName: "Khách hàng",
+    to: "user",
+  },
 ];

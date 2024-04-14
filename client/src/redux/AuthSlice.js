@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getUserList, searchCusAct } from "./userAction";
 
 const initialState = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : {},
+  userList: [],
+  userSearch: [],
+  loading: false,
+  count: 0,
 };
 
 const authSlice = createSlice({
@@ -19,6 +24,37 @@ const authSlice = createSlice({
     update: (state, action) => {
       state.user = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUserList.pending, (state) => {
+        state.loading = true;
+        state.message = "PENDING";
+      })
+      .addCase(getUserList.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.count = payload.count;
+        state.userList = payload.data;
+        state.message = payload?.message;
+      })
+      .addCase(getUserList.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload?.message;
+      })
+      .addCase(searchCusAct.pending, (state) => {
+        state.loading = true;
+        state.message = "PENDING";
+      })
+      .addCase(searchCusAct.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.count = payload.count;
+        state.userList = payload.data;
+        state.message = payload?.message;
+      })
+      .addCase(searchCusAct.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload?.message;
+      });
   },
 });
 

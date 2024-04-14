@@ -12,6 +12,7 @@ const routeConfig = {
   managementProduct: "/management/product/",
   managementProductSearch: "/management/product/search/:id",
   managementBill: "/management/bill/",
+  managementUser: "/management/user/",
   updateUser: "/user/update/:userId",
 };
 
