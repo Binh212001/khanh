@@ -56,6 +56,7 @@ function Bill() {
       link.href = fileURL;
       link.download = new Date() + ".pdf";
       link.click();
+      setListBillSelect([]);
     } catch (error) {
       console.error("Error exporting bill:", error);
     }
@@ -66,6 +67,7 @@ function Bill() {
       toast(data);
       dispatch(getBills({ limit, page: currentPage - 1 }));
       setIsModalOpen(false);
+      setListBillSelect([]);
     } catch (error) {
       console.log("🚀 ~ deleteBill ~ error:", error);
     }

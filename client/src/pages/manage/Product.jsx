@@ -58,6 +58,7 @@ function Product() {
         getProductByUserId({ page: current - 1, limit, userId: user.userId })
       );
       toast("Thành công");
+      setListStopSale([]);
     } catch (error) {
       console.log("🚀 ~ handleStopSell ~ error:", error);
       toast("Thất bại");

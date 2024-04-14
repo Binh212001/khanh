@@ -47,6 +47,7 @@ function Users() {
       toast(data);
       dispatch(getUserList({ limit, page: currentPage - 1 }));
       setIsModalOpen(false);
+      setListCusSelect([]);
     } catch (error) {}
   };
 
