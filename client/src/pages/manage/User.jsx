@@ -10,7 +10,7 @@ import authRest from "../../api/AuthRest";
 function Users() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [currentPage, setCurrentPage] = useState(1);
-  const [listBillSelect, setListBillSelect] = useState([]);
+  const [listCusSelect, setListCusSelect] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -43,16 +43,21 @@ function Users() {
   };
   const lockAccount = async () => {
     try {
-      const data = await authRest.lock(listBillSelect);
+      const data = await authRest.lock(listCusSelect);
       toast(data);
       dispatch(getUserList({ limit, page: currentPage - 1 }));
       setIsModalOpen(false);
     } catch (error) {}
   };
 
-  const selectBill = (e) => {
+  const selectCus = (e) => {
     const data = e.target.value;
-    setListBillSelect([...listBillSelect, data]);
+    if (listCusSelect.includes(data)) {
+      const updatedList = listCusSelect.filter((item) => item !== data);
+      setListCusSelect(updatedList);
+    } else {
+      setListCusSelect([...listCusSelect, data]);
+    }
   };
 
   if (!user?.sellers) {
@@ -93,7 +98,7 @@ function Users() {
       <div className="flex justify-between items-center my-4">
         <div className="flex gap-2">
           <Button
-            disabled={listBillSelect.length > 0 ? false : true}
+            disabled={listCusSelect.length > 0 ? false : true}
             onClick={showModal}
           >
             Khóa tài khoản
@@ -122,7 +127,7 @@ function Users() {
                     <input
                       type="checkbox"
                       value={b.userId}
-                      onChange={(e) => selectBill(e)}
+                      onChange={(e) => selectCus(e)}
                     />
                   </td>
                   <td className="text-center">{b.firstName + b.lastName}</td>
@@ -139,7 +144,7 @@ function Users() {
                     <input
                       type="checkbox"
                       value={b.userId}
-                      onChange={(e) => selectBill(e)}
+                      onChange={(e) => selectCus(e)}
                     />
                   </td>
                   <td className="text-center">{b.firstName + b.lastName}</td>

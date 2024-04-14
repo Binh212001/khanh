@@ -80,7 +80,13 @@ function Product() {
 
   const selectProduct = (e) => {
     const data = e.target.value;
-    setListStopSale([...listStopSale, data]);
+
+    if (listStopSale.includes(data)) {
+      const updatedList = listStopSale.filter((item) => item !== data);
+      setListStopSale(updatedList);
+    } else {
+      setListStopSale([...listStopSale, data]);
+    }
   };
 
   const handleEdit = (p) => {

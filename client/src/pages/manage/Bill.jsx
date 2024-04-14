@@ -39,7 +39,12 @@ function Bill() {
 
   const selectBill = (e) => {
     const data = e.target.value;
-    setListBillSelect([...listBillSelect, data]);
+    if (listCusSelect.includes(data)) {
+      const updatedList = listBillSelect.filter((item) => item !== data);
+      setListBillSelect(updatedList);
+    } else {
+      setListBillSelect([...listBillSelect, data]);
+    }
   };
 
   const exportBill = async () => {
@@ -215,7 +220,7 @@ const col = [
   "Màu sắc",
   "Ngày bán",
   "SDT",
-  "Dia chi"
+  "Dia chi",
 ];
 
 export default Bill;
