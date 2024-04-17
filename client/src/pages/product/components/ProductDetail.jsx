@@ -7,6 +7,15 @@ import baseApi, { BASEURL } from "../../../api/BaseApi";
 import billRest from "../../../api/BillRest";
 
 function ProductDetail() {
+  function getCartfromLocalStorage() {
+    const value = localStorage.getItem("cart");
+    if (value === null || value === undefined) {
+      return [];
+    }
+    return JSON.parse(value);
+  }
+
+  const [cart, setCart] = useState(getCartfromLocalStorage());
   const { id } = useParams();
   const [qty, setQty] = useState(1);
   const [color, setColor] = useState("red");
@@ -82,6 +91,24 @@ function ProductDetail() {
     }
   };
 
+  function addToCart() {
+    const cartId = Math.floor(Math.random() * 1000000000);
+    const cartItem = {
+      cartId,
+      product,
+      quantity: qty,
+      account: user,
+      color,
+      size,
+    };
+    const dataCart = getCartfromLocalStorage();
+    if (dataCart.length === 0) {
+      localStorage.setItem("cart", JSON.stringify([cartItem]));
+    } else {
+      dataCart.push(cartItem);
+      localStorage.setItem("cart", JSON.stringify(dataCart));
+    }
+  }
   return (
     <div className="mx-7 my-auto p-4">
       <ToastContainer />
@@ -155,7 +182,9 @@ function ProductDetail() {
               <div className="mb-2">Total: {qty * product.price}vnd</div>
             </div>
 
-            <Button onClick={showModal}>Mua hàng</Button>
+            <Button onClick={addToCart}>Thêm vào giỏ hàng</Button>
+
+            {/* <Button onClick={showModal}>Thêm vào giỏ hàng</Button>
             <Modal
               title="Xác nhận mua hàng"
               open={isModalOpen}
@@ -164,7 +193,7 @@ function ProductDetail() {
               visible={isModalOpen}
             >
               <p>Bạn có muốn mua đơn hàng này không ?</p>
-            </Modal>
+            </Modal> */}
           </Col>
         </Row>
         <Divider orientation="left" className="comment" plain={false}>
