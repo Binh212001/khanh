@@ -1,33 +1,32 @@
 package org.example.shop.entities;
-
-
 import jakarta.persistence.*;
 import lombok.Data;
-import org.apache.catalina.User;
+import java.util.Date;
 
-import java.time.LocalDateTime;
-
-@Entity
 @Data
-@Table(name = "bills")
+@Entity
+@Table(name = "bill")
 public class Bill {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private long quantity;
-    @ManyToOne
-    @JoinColumn(name = "pid")
-    private Product product;
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private Account account;
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    private  String size ;
-    private  String color;
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "sum")
+    private float sum;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "address")
+    private String address;
+
+
+    @Column(name = "created_at")
+    private Date createdAt;
 }
+

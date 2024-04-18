@@ -34,5 +34,6 @@ public class Account {
     protected void onCreate() {
         userId = UUID.randomUUID().toString();
         fullName= firstName+ " "+lastName;
+        active= true;
     }
 }
