@@ -28,7 +28,7 @@ function Header() {
   };
   const handelLogout = () => {
     localStorage.removeItem("user");
-    dispatch(logout);
+    dispatch(logout());
     navigate("/auth");
   };
 

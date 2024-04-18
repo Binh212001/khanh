@@ -61,10 +61,10 @@ function Cart() {
     try {
       const bill = {
         billId,
-        userId: cart[0].account.userId,
-        fullName: cart[0].account.firstName + cart[0].account.lastName,
-        address: cart[0].account.addressDetail,
-        phone: cart[0].account.phone,
+        userId: user?.userId,
+        fullName: user?.firstName + user?.lastName,
+        address: user?.addressDetail,
+        phone: user?.phone,
         sum,
       };
       await billRest.createBill(bill);
@@ -87,6 +87,7 @@ function Cart() {
       setBuy([]);
       setSum(0);
     } catch (error) {
+      console.log("🚀 ~ buyProduct ~ error:", error);
       toast("Mua Hàng thất bại.");
     }
   };
