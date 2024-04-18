@@ -58,6 +58,7 @@ public class BillBuyController {
                 buy.setPrice(request.getPrice());
                 buy.setQuantity(request.getQuantity());
                 buy.setProductName(request.getName());
+                buy.setProductId(request.getProductId());
                 Optional<Bill>  bill =  billRepo.findById(request.getBillId());
                 buy.setBill(bill.get());
                 buyRepo.save(buy);
@@ -155,18 +156,18 @@ public class BillBuyController {
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
             document.open();
-            document.add(new Paragraph("---------------------Thong tin hoa don----------------------"));
+            document.add(new Paragraph("THONG TIN HOA DON"));
             document.add(new Paragraph("Ma  hoa don : " + bills.getId()));
             document.add(new Paragraph("Khach hang: " + bills.getFullName()));
             document.add(new Paragraph("Dia chi: " + bills.getAddress()));
             document.add(new Paragraph("So dien thoai: " + bills.getPhone()));
             for (Buy buy : buys) {
+                document.add(new Paragraph("------------------------------------------------------------"));
                 document.add(new Paragraph("Ten San pham:"+buy.getProductName()))  ;
                 document.add(new Paragraph("So luong: " + buy.getQuantity()));
                 document.add(new Paragraph("Kich co: " + buy.getSize()));
                 document.add(new Paragraph("Mau Sac: " + buy.getColorPid()));
                 document.add(new Paragraph("Don gia: " + buy.getPrice()));
-                document.add(new Paragraph("------------------------------------------------------------"));
 
             }
             document.add(new Paragraph("Tong cong: " +bills.getSum()));
