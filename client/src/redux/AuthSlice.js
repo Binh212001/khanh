@@ -4,7 +4,7 @@ import { getUserList, searchCusAct } from "./userAction";
 const initialState = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
-    : {},
+    : null,
   userList: [],
   userSearch: [],
   loading: false,
@@ -19,7 +19,7 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
     logout: (state, action) => {
-      state.user = {};
+      state.user = null;
     },
     update: (state, action) => {
       state.user = action.payload;

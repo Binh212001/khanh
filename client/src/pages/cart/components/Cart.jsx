@@ -2,123 +2,15 @@ import { Button, Modal } from "antd";
 import { useState } from "react";
 import { BASEURL } from "../../../api/BaseApi";
 import { ToastContainer, toast } from "react-toastify";
-// import { DeleteTwoTone } from "@ant-design/icons";
-// import { Modal } from "antd";
-// import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// import { ToastContainer, toast } from "react-toastify";
-// import billRest from "../../../api/BillRest";
-// import { getBillByUserId } from "../../../redux/billAction";
-// function Cart() {
-//   const dispatch = useDispatch();
-//   const { user } = useSelector((state) => state.auth);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   const showModal = () => {
-//     setIsModalOpen(true);
-//   };
-
-//   const handleCancel = () => {
-//     setIsModalOpen(false);
-//   };
-
-//   const navigate = useNavigate();
-//   if (!user?.userId) {
-//     navigate("/auth");
-//   }
-//   useEffect(() => {
-//     dispatch(
-//       getBillByUserId({
-//         userId: user?.userId,
-//       })
-//     );
-//   }, [user, dispatch]);
-
-//   const deleteBill = async (id) => {
-//     try {
-//       await billRest.delete([id]);
-//       toast("Xóa hóa đơn thành công");
-//       dispatch(
-//         getBillByUserId({
-//           userId: user?.userId,
-//         })
-//       );
-//       handleCancel();
-//     } catch (error) {
-//       console.log("🚀 ~ deleteBill ~ error:", error);
-//     }
-//   };
-//   const { bills } = useSelector((state) => state.bill);
-
-//   return (
-//     <div className="flex justify-center" style={{ minHeight: "50vh" }}>
-//       <ToastContainer />
-//       <div>
-//         <div className="container mx-auto p-4 grid grid-cols-4 gap-5">
-//           {bills.map((item) => (
-//             <div className="bg-white shadow-md rounded-md p-6 relative">
-//               <Modal
-//                 title="Xác nhận xóa đơn hàng."
-//                 open={isModalOpen}
-//                 onOk={() => deleteBill(item?.id)}
-//                 onCancel={handleCancel}
-//                 visible={isModalOpen}
-//               >
-//                 <p>Bạn có muốn huy đơn hàng này không.</p>
-//               </Modal>
-//               <div>
-//                 <span onClick={showModal} className="absolute right-4 top-4">
-//                   <DeleteTwoTone />
-//                 </span>
-//                 <h1 className="text-2xl font-bold mb-4 dot">
-//                   {item.product.title}
-//                 </h1>
-//               </div>
-//               <div className="flex justify-between mb-4">
-//                 <p className="font-bold">Số lượng:</p>
-//                 <p>{item?.quantity}</p>
-//               </div>
-//               <div className="flex justify-between mb-4">
-//                 <p className="font-bold">Giá:</p>
-//                 <p>{item?.product?.price}</p>
-//               </div>
-//               <div className="flex justify-between mb-4">
-//                 <div>
-//                   <p className="font-bold">Ngày:</p>
-//                   <p>{item.createdAt}</p>
-//                 </div>
-//               </div>
-//               <div className="flex justify-between mb-4">
-//                 <div>
-//                   <p className="font-bold">SDT:</p>
-//                   <p>{item?.account?.phone}</p>
-//                 </div>
-//               </div>
-//               <div className="flex justify-between mb-4">
-//                 <div>
-//                   <p className="font-bold">Đại chỉ:</p>
-//                   <p>{item?.account?.addressDetail}</p>
-//                 </div>
-//               </div>
-//               <div className="flex justify-between mb-4">
-//                 <p className="font-bold">Tổng:</p>
-//                 <p>{item?.product?.price * item?.quantity}</p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Cart;
+import billRest from "../../../api/BillRest";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const [buy, setBuy] = useState([]);
   let [sum, setSum] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
 
   function getCartfromLocalStorage() {
     const value = localStorage.getItem("cart");
@@ -159,7 +51,56 @@ function Cart() {
     setIsModalOpen(false);
   };
 
-  const buyProduct = () => {};
+  const buyProduct = async () => {
+    if (user === null) {
+      toast("Vui lòng đăng nhập ");
+      setIsModalOpen(false);
+      return;
+    }
+    const billId = Math.floor(Math.random() * 999999);
+    try {
+      const bill = {
+        billId,
+        userId: cart[0].account.userId,
+        fullName: cart[0].account.firstName + cart[0].account.lastName,
+        address: cart[0].account.addressDetail,
+        phone: cart[0].account.phone,
+        sum,
+      };
+      await billRest.createBill(bill);
+      const dataBuy = [];
+      buy.forEach((data) => {
+        dataBuy.push({
+          name: data.product.title,
+          price: data.product.price,
+          quantity: data.quantity,
+          image: data.product.image,
+          size: data.size,
+          color: data.color,
+          billId,
+          productId: data.product.pid,
+        });
+      });
+      await billRest.createBuy(dataBuy);
+      toast("Mua hàng thành công.");
+      setIsModalOpen(false);
+      setBuy([]);
+      setSum(0);
+    } catch (error) {
+      toast("Mua Hàng thất bại.");
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const redirectBill = () => {
+    if (user === null) {
+      toast("Vui lòng cần đăng nhập ");
+    } else {
+      navigate("/myBill");
+    }
+  };
+
   return (
     <div
       className="container mx-auto px-4 grid grid-cols-4 gap-4 "
@@ -225,7 +166,7 @@ function Cart() {
             </div>
           );
         })}
-        <div>{sum}</div>
+        <div>{sum === 0 ? "" : sum}</div>
         <div className="grid">
           <Button type="primary" className="block" onClick={showModal}>
             Mua Hàng
@@ -242,6 +183,9 @@ function Cart() {
         <p>Bạn có muốn mua đơn hàng này không.</p>
       </Modal>
       <ToastContainer />
+      <div className="flex items-center mb-7">
+        <Button onClick={redirectBill}>Hóa đơn của tôi</Button>
+      </div>
     </div>
   );
 }

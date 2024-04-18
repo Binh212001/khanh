@@ -5,16 +5,18 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Dropdown, Menu } from "antd";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/logo.webp";
 import CustomLink from "../../Link/CustomLink";
 import { listMenu } from "./MenuList";
 import useDebounce from "./useDebounce";
+import { logout } from "../../../redux/AuthSlice";
 
 function Header() {
   const [keySearch, setKeySearch] = useState("");
   const debounceInput = useDebounce(keySearch, 500);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const handleSearch = (e) => {
@@ -26,6 +28,7 @@ function Header() {
   };
   const handelLogout = () => {
     localStorage.removeItem("user");
+    dispatch(logout);
     navigate("/auth");
   };
 
@@ -103,7 +106,7 @@ function Header() {
             </span>
           </Dropdown>
 
-          <Link to={user ? "/cart" : "/auth"}>
+          <Link to={"/cart"}>
             <ShoppingCartOutlined
               style={{
                 frontSize: "20px",

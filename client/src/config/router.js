@@ -14,6 +14,7 @@ const routeConfig = {
   managementBill: "/management/bill/",
   managementUser: "/management/user/",
   updateUser: "/user/update/:userId",
+  myBill: "/myBill",
 };
 
 export default routeConfig;
