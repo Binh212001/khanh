@@ -25,7 +25,7 @@ public class Buy {
     @Column(name = "image")
     private String image;
     private String productName;
-    private Long productId;
+    private String productId;
     @ManyToOne
     @JoinColumn(name = "bill_id")
     private Bill bill;

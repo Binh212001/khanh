@@ -1,10 +1,9 @@
 package org.example.shop.controllers;
 
+import jakarta.transaction.Transactional;
 import org.example.shop.entities.Bill;
 import org.example.shop.entities.Buy;
-import org.example.shop.models.BillRequest;
-import org.example.shop.models.BillResponse;
-import org.example.shop.models.BuyRequest;
+import org.example.shop.models.*;
 import org.example.shop.repo.BillRepo;
 import org.example.shop.repo.BuyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bill")
@@ -125,13 +125,12 @@ public class BillBuyController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-     @GetMapping("/delete")
-        public ResponseEntity<Boolean> deleteBill(@RequestBody List<Long> ids) {
+    @Transactional
+     @DeleteMapping("/delete")
+        public ResponseEntity<Boolean> deleteBill(@RequestParam("id") Long id) {
             try {
-                for (Long id : ids){
-                    billRepo.deleteById(id);
-                    buyRepo.deleteByBillId(id);
-                }
+                buyRepo.deleteByBillId(id);
+                billRepo.deleteById(id);
                 return ResponseEntity.ok(true);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(false);
@@ -139,7 +138,7 @@ public class BillBuyController {
         }
 
     @PostMapping(value = "/pdf",produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportBillsAsPdf(@RequestParam("billId") Long billId)  {
+    public ResponseEntity<byte[]> exportBillsAsPdf(@RequestBody Long billId)  {
         Optional<Bill> bills = billRepo.findById(billId);
         List<Buy> buys = buyRepo.findByBillId(bills.get().getId());
         byte[] pdfBytes = generatePdf(bills.get() , buys);
@@ -178,6 +177,8 @@ public class BillBuyController {
         return outputStream.toByteArray();
 
     }
+
+
 
 
 

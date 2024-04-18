@@ -11,5 +11,5 @@ public class BuyRequest {
     private String size;
     private String color;
     private Long billId;
-    private Long productId;
+    private String productId;
 }
