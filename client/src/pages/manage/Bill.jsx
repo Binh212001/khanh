@@ -1,19 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import TableCustom from "../../custom/TableCustom";
-import { getBills, getBillsByCus } from "../../redux/billAction";
-import { Button, Input, Modal, Pagination, Spin } from "antd";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Input, Modal } from "antd";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import billRest from "../../api/BillRest";
-import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
-import { ToastContainer, toast } from "react-toastify";
 
 function Bill() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [currentPage, setCurrentPage] = useState(1);
-  const [listBillSelect, setListBillSelect] = useState([]);
-  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const [bills, setBills] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [billDelete, setBillDelete] = useState(null);
+  const [keySearch, setKeySearch] = useState("");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await billRest.getBills();
+        setBills(data);
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
+
+  const redirectToCart = () => {
+    navigate("/cart");
+  };
+
+  const deleteBill = async (id) => {
+    showModal();
+    setBillDelete(id);
+  };
+  if (user === null) {
+    return (
+      <div className="flex justify-center" style={{ minHeight: "50vh" }}>
+        <h1>Bạn chưa đang nhập</h1>
+      </div>
+    );
+  }
+
+  const deleteBillAtc = async () => {
+    try {
+      await billRest.delete(billDelete);
+      const data = await billRest.getBills();
+      setBills(data);
+      handleCancel();
+    } catch (error) {
+      console.log("🚀 ~ deleteBillAtc ~ error:", error);
+    }
+  };
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -21,208 +57,126 @@ function Bill() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const limit = 12;
-  const { bills, count, billSearch, loading } = useSelector(
-    (state) => state.bill
-  );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getBills({ limit, page: currentPage - 1 }));
-  }, [dispatch, currentPage]);
-
-  const changePage = (p) => {
-    setCurrentPage(p);
-  };
-
-  const selectBill = (e) => {
-    const data = e.target.value;
-    if (listBillSelect.includes(data)) {
-      const updatedList = listBillSelect.filter((item) => item !== data);
-      setListBillSelect(updatedList);
+  const searchBill = async () => {
+    if (keySearch.length === 0) {
+      return;
     } else {
-      setListBillSelect([...listBillSelect, data]);
+      const data = await billRest.getBillByCus(keySearch);
+      setBills(data);
     }
   };
 
-  const exportBill = async () => {
+  const exportBill = async (billId) => {
     try {
-      const response = await billRest.export(listBillSelect);
+      const response = await billRest.export(billId);
       const file = new Blob([response], { type: "application/pdf" });
       const fileURL = URL.createObjectURL(file);
       const link = document.createElement("a");
       link.href = fileURL;
       link.download = new Date() + ".pdf";
       link.click();
-      setListBillSelect([]);
     } catch (error) {
       console.error("Error exporting bill:", error);
     }
   };
-  const deleteBill = async () => {
-    try {
-      const data = await billRest.delete(listBillSelect);
-      toast(data);
-      dispatch(getBills({ limit, page: currentPage - 1 }));
-      setIsModalOpen(false);
-      setListBillSelect([]);
-    } catch (error) {
-      console.log("🚀 ~ deleteBill ~ error:", error);
-    }
-  };
-  const searchBill = async () => {
-    dispatch(getBillsByCus(keyword));
-  };
-
-  if (!user?.sellers) {
-    return (
-      <div
-        className="text-center align-middle flex flex-col justify-center"
-        style={{ height: "60vh" }}
-      >
-        <h3 className="font-bold text-yellow-yody text-3xl">
-          Bạn không có quyền truy cập trang này.
-        </h3>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div
-        style={{ minHeight: "50vh" }}
-        className="flex flex-col justify-center items-center text-center m-auto"
-      >
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
-      </div>
-    );
-  }
   return (
-    <div className="container m-auto">
-      <Modal
-        title="Xác nhận xóa đơn hàng."
-        open={isModalOpen}
-        onOk={deleteBill}
-        onCancel={handleCancel}
-        visible={isModalOpen}
-      >
-        <p>Bạn có muốn xóa những đơn hàng này không.</p>
-      </Modal>
-      <ToastContainer />
-      <div className="flex justify-between items-center my-4">
-        <div className="flex gap-2">
-          <Button
-            disabled={listBillSelect.length > 0 ? false : true}
-            onClick={showModal}
-          >
-            Xóa hóa đơn
-          </Button>
-          <Button
-            disabled={listBillSelect.length > 0 ? false : true}
-            onClick={exportBill}
-          >
-            Xuất hóa đơn
-          </Button>
-        </div>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Search bill by customer"
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-          <Button className="items-center" onClick={() => searchBill()}>
-            <SearchOutlined />
-          </Button>
-        </div>
+    <div className="block">
+      <div className=" flex float-end gap-3 mt-4">
+        <Input
+          type="text"
+          placeholder="Tìm theo tên khách hàng"
+          onChange={(e) => setKeySearch(e.target.value)}
+        />
+        <Button onClick={searchBill}>
+          <SearchOutlined />
+        </Button>
       </div>
-      {/* <input type="file" value={file}  />
-      <Button /> */}
+      <br />
+      <div className="flex justify-center" style={{ minHeight: "50vh" }}>
+        <ToastContainer />
 
-      <TableCustom col={col}>
-        {billSearch.length > 0
-          ? billSearch.map((b) => {
+        <div>
+          <div className="container mx-auto p-4 grid grid-cols-4 gap-5">
+            {bills.map((item) => {
+              const delId = item?.bill?.id;
               return (
-                <tr key={b.id}>
-                  <td className="text-center">
-                    <input
-                      type="checkbox"
-                      value={b.id}
-                      onChange={(e) => selectBill(e)}
-                    />
-                  </td>
-                  <td className="text-center">{b.id}</td>
-                  <td className="text-center">{b.product.title}</td>
-                  <td className="text-center">
-                    {b.account?.firstName + b.account?.lastName}
-                  </td>
-                  <td className="text-center">{b.product.price}</td>
-                  <td className="text-center">{b.quantity}</td>
-                  <td className="text-center">
-                    {b.quantity * b.product.price}
-                  </td>
-                  <td className="text-center">{b.size}</td>
-                  <td className="text-center">{b.color}</td>
-                  <td className="text-center">{b.createdAt}</td>
-                  <td className="text-center">{b?.account?.addressDetail}</td>
-                  <td className="text-center">{b?.account?.phone}</td>
-                </tr>
-              );
-            })
-          : bills.map((b) => {
-              return (
-                <tr key={b.id}>
-                  <td className="text-center">
-                    <input
-                      type="checkbox"
-                      value={b.id}
-                      onChange={(e) => selectBill(e)}
-                    />
-                  </td>
-                  <td className="text-center">{b.id}</td>
-                  <td className="text-center">{b.product.title}</td>
-                  <td className="text-center">
-                    {b.account?.firstName + b.account?.lastName}
-                  </td>
-                  <td className="text-center">{b.product.price}</td>
-                  <td className="text-center">{b.quantity}</td>
-                  <td className="text-center">
-                    {b.quantity * b.product.price}
-                  </td>
-                  <td className="text-center">{b.size}</td>
-                  <td className="text-center">{b.color}</td>
-                  <td className="text-center">{b.createdAt}</td>
-                  <td className="text-center">{b?.account?.addressDetail}</td>
-                  <td className="text-center">{b?.account?.phone}</td>
-                </tr>
+                <div
+                  key={item?.bill?.id}
+                  className="bg-white shadow-md rounded-md p-6 relative"
+                >
+                  <span
+                    onClick={() => deleteBill(delId)}
+                    className="absolute right-4 top-4"
+                  >
+                    <DeleteOutlined />
+                  </span>
+                  <div>
+                    <div className="flex">
+                      <p className="font-bold">MHD:</p>
+                      <p>{item?.bill?.id}</p>
+                    </div>
+                    <div className="flex">
+                      <p className="font-bold">Khách hàng:</p>
+                      <p>{item?.bill?.fullName}</p>
+                    </div>
+                    <div className="flex">
+                      <p className="font-bold">Số điện thoại:</p>
+                      <p>{item?.bill?.phone}</p>
+                    </div>
+                    <div className="flex">
+                      <p className="font-bold">Địa chỉ:</p>
+                      <p>{item?.bill?.address}</p>
+                    </div>
+
+                    <br />
+                    <h2>Danh sách sản phẩm</h2>
+                    {item?.buyList?.map((data) => {
+                      return (
+                        <div key={data?.id}>
+                          <div>
+                            <p className="font-bold">Tên sản phẩm:</p>
+                            <p>{data.productName}</p>
+                          </div>
+                          <div className="flex">
+                            <p className="font-bold">Số lượng:</p>
+                            <p>{data.quantity}</p>
+                          </div>
+                          <div className="flex">
+                            <p className="font-bold">Giá:</p>
+                            <p>{data.price}</p>
+                          </div>
+                          <br />
+                        </div>
+                      );
+                    })}
+                    <div className="flex">
+                      <p className="font-bold">Tổng:</p>
+                      <p>{item?.bill?.sum}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-end">
+                    <Button onClick={() => exportBill(delId)}>
+                      Xuất hóa đơn
+                    </Button>
+                  </div>
+                </div>
               );
             })}
-      </TableCustom>
-      {billSearch.length === 0 ? (
-        <div className="text-center mt-4">
-          <Pagination
-            total={count}
-            pageSize={limit}
-            current={currentPage}
-            onChange={(currentPage) => changePage(currentPage)}
-          />
+          </div>
         </div>
-      ) : null}
+
+        <Modal
+          title="Xác nhận xóa đơn hàng."
+          open={isModalOpen}
+          onOk={() => deleteBillAtc()}
+          onCancel={handleCancel}
+          visible={isModalOpen}
+        >
+          <p>Bạn có muốn xoa đơn hàng này không.</p>
+        </Modal>
+      </div>
     </div>
   );
 }
-const col = [
-  "MSV",
-  "Tên sản phẩm",
-  "Người mua",
-  "Giá",
-  "Số lượng",
-  "Tổng",
-  "Kích cỡ",
-  "Màu sắc",
-  "Ngày bán",
-  "SDT",
-  "Dia chi",
-];
 
 export default Bill;

@@ -2,18 +2,25 @@ import baseApi from "./BaseApi";
 const path = "/bill";
 
 const billRest = {
-  create: (data) => {
-    const url = `${path}/create`;
-
+  createBill: (data) => {
+    const url = `${path}/create/bill`;
+    return baseApi.post(url, data);
+  },
+  createBuy: (data) => {
+    const url = `${path}/create/buy`;
     return baseApi.post(url, data);
   },
   getBillByUserId: (params) => {
-    const url = `${path}/user`;
+    const url = `${path}/userId`;
     return baseApi.get(url, { params });
   },
-  getBills: (params) => {
+  getBills: () => {
     const url = `${path}/getAll`;
-    return baseApi.get(url, { params });
+    return baseApi.get(url);
+  },
+  getDataChart: () => {
+    const url = `dataChartQty`;
+    return baseApi.get(url);
   },
   export: (data) => {
     const url = `${path}/pdf`;
@@ -21,14 +28,17 @@ const billRest = {
       responseType: "arraybuffer",
     });
   },
-  delete: (data) => {
-    const numbersData = data.map((str) => parseInt(str, 10));
+  delete: (id) => {
     const url = `${path}/delete`;
-    return baseApi.post(url, numbersData);
+    return baseApi.delete(url, { params: { id } });
   },
-  getBillByCus: (params) => {
-    const url = `${path}/search`;
-    return baseApi.get(url, { params });
+  getBillByCus: (fullName) => {
+    const url = `${path}/get/fullName`;
+    return baseApi.get(url, {
+      params: {
+        fullName,
+      },
+    });
   },
 };
 
