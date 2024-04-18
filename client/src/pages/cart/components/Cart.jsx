@@ -3,9 +3,7 @@ import { useState } from "react";
 import { BASEURL } from "../../../api/BaseApi";
 import { ToastContainer, toast } from "react-toastify";
 import billRest from "../../../api/BillRest";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
+import { getBillByUserId } from "../../../redux/billAction";
 function Cart() {
   const [buy, setBuy] = useState([]);
   let [sum, setSum] = useState(0);
