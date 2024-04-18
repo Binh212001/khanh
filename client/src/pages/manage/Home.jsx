@@ -3,6 +3,7 @@ import { Col, Row, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import productRest from "../../api/ProductRest";
 import LineChart from "./LineChart ";
+import billRest from "../../api/BillRest";
 
 function Home() {
   const [label, setLaBel] = useState([]);
@@ -15,15 +16,16 @@ function Home() {
   useEffect(() => {
     const getTopSelleing = async () => {
       try {
-        const { data } = await productRest.topSalling();
+        const data = await billRest.getDataChart();
+        console.log("🚀 ~ getTopSelleing ~ data:", data);
         let sum1 = 0;
         let sum2 = 0;
         data.forEach((c) => {
           setLaBel((prev) => [...prev, c.productName]);
-          setDataChartQty((prev) => [...prev, c.totalQuantitySold]);
-          sum1 += c.totalQuantitySold;
-          setDataChartRevenue((prev) => [...prev, c.revenue]);
-          sum2 += c.revenue;
+          setDataChartQty((prev) => [...prev, c.count]);
+          sum1 += c.count;
+          setDataChartRevenue((prev) => [...prev, c.reverse]);
+          sum2 += c.reverse;
         });
         setSumQty(sum1);
         setSumRevenue(sum2);

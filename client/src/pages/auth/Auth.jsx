@@ -127,6 +127,30 @@ function Auth() {
               >
                 <Input />
               </Form.Item>
+              <Form.Item
+                label="Số điện thoại"
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng điền tên.",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Dịa chỉ"
+                name="addressDetail"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng điền tên.",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
             </>
           ) : (
             <></>

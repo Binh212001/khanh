@@ -2,6 +2,7 @@ import routeConfig from "../config/router";
 import Auth from "../pages/auth/Auth";
 import UpdateUser from "../pages/auth/UpdateUser.jsx";
 import Cart from "../pages/cart/components/Cart";
+import MyBill from "../pages/cart/components/MyBill.jsx";
 import Ao from "../pages/category/ao/Ao";
 import Quan from "../pages/category/quan/Quan";
 import Shose from "../pages/category/shose/Shose.jsx";
@@ -51,7 +52,11 @@ const routes = [
     element: <Quan />,
     layout: "layout",
   },
-
+  {
+    path: routeConfig.myBill,
+    element: <MyBill />,
+    layout: "layout",
+  },
   {
     path: routeConfig.vay,
     element: <Vay />,

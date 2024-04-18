@@ -108,6 +108,7 @@ function ProductDetail() {
       dataCart.push(cartItem);
       localStorage.setItem("cart", JSON.stringify(dataCart));
     }
+    toast("Đã thêm sản phẩm vào giỏ hàng");
   }
   return (
     <div className="mx-7 my-auto p-4">
