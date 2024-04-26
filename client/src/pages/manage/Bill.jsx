@@ -79,6 +79,14 @@ function Bill() {
       console.error("Error exporting bill:", error);
     }
   };
+
+  const dagiao = async (id) => {
+    try {
+      await billRest.dagiao(id);
+      const data = await billRest.getBills();
+      setBills(data);
+    } catch (error) {}
+  };
   return (
     <div className="block">
       <div className=" flex float-end gap-3 mt-4">
@@ -150,14 +158,36 @@ function Bill() {
                       );
                     })}
                     <div className="flex">
+                      <p className="font-bold">Ngày đặt:</p>
+                      <p>
+                        {item.bill.createdAt
+                          ? `${new Date(item.bill.createdAt).getDate()}/${
+                              new Date(item.bill.createdAt).getMonth() + 1
+                            }/${new Date(item.bill.createdAt)
+                              .getFullYear()
+                              .toString()
+                              .slice(2)}`
+                          : ""}
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="font-bold">Trạng thái:</p>
+                      <p>
+                        {item?.bill?.received
+                          ? "Đã giao xong"
+                          : "Chưa giao xong"}
+                      </p>
+                    </div>
+                    <div className="flex">
                       <p className="font-bold">Tổng:</p>
                       <p>{item?.bill?.sum}</p>
                     </div>
                   </div>
-                  <div className="flex items-end">
+                  <div className="flex items-end gap-2">
                     <Button onClick={() => exportBill(delId)}>
                       Xuất hóa đơn
                     </Button>
+                    <Button onClick={() => dagiao(delId)}>Đã giao xong</Button>
                   </div>
                 </div>
               );

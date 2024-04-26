@@ -40,6 +40,11 @@ const billRest = {
       },
     });
   },
+  dagiao: (id) => {
+    console.log("🚀 ~ id:", id);
+    const url = `${path}/received`;
+    return baseApi.put(url, id);
+  },
 };
 
 export default billRest;

@@ -2,6 +2,7 @@ package org.example.shop.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -26,7 +27,14 @@ public class Bill {
     private String address;
 
 
+    private Boolean received;
     @Column(name = "created_at")
     private Date createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        received = false;
+    }
 }
 

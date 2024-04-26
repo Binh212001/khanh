@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { useState } from "react";
 import { BASEURL } from "../../../api/BaseApi";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +8,11 @@ import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const [buy, setBuy] = useState([]);
+  const [guest, setGuest] = useState(null);
+  const [invalidFullName, setInValidFullName] = useState(false);
+  const [invalidAddress, setInvalidAddress] = useState(false);
+  const [invalidPhone, setInvalidPhone] = useState(false);
+
   let [sum, setSum] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
@@ -52,12 +57,50 @@ function Cart() {
   };
 
   const buyProduct = async () => {
+    const billId = Math.floor(Math.random() * 999999);
     if (user === null) {
-      toast("Vui lòng đăng nhập ");
+      if (!guest.fullName) {
+        setInValidFullName(true);
+        return;
+      }
+      if (!guest.addressDetail) {
+        setInvalidAddress(true);
+        return;
+      }
+      const phoneNumberRegex = /^[0-9]{10}$/;
+      if (!phoneNumberRegex.test(guest.phone)) {
+        setInvalidPhone(true);
+        return;
+      }
+      const bill = {
+        billId,
+        userId: null,
+        fullName: guest?.fullName,
+        address: guest?.addressDetail,
+        phone: guest?.phone,
+        sum,
+      };
+      await billRest.createBill(bill);
+      const dataBuy = [];
+      buy.forEach((data) => {
+        dataBuy.push({
+          name: data.product.title,
+          price: data.product.price,
+          quantity: data.quantity,
+          image: data.product.image,
+          size: data.size,
+          color: data.color,
+          billId,
+          productId: data.product.pid,
+        });
+      });
+      await billRest.createBuy(dataBuy);
+      toast("Mua hàng thành công.");
       setIsModalOpen(false);
+      setBuy([]);
+      setSum(0);
       return;
     }
-    const billId = Math.floor(Math.random() * 999999);
     try {
       const bill = {
         billId,
@@ -87,7 +130,6 @@ function Cart() {
       setBuy([]);
       setSum(0);
     } catch (error) {
-      console.log("🚀 ~ buyProduct ~ error:", error);
       toast("Mua Hàng thất bại.");
     }
   };
@@ -102,6 +144,18 @@ function Cart() {
     }
   };
 
+  const closeModalGuest = () => {
+    setGuest(null);
+    setIsModalOpen(false);
+  };
+
+  const handleInfoGuest = (e) => {
+    const { name, value } = e.target;
+    setGuest({
+      ...guest,
+      [name]: value,
+    });
+  };
   return (
     <div
       className="container mx-auto px-4 grid grid-cols-4 gap-4 "
@@ -174,15 +228,79 @@ function Cart() {
           </Button>
         </div>
       </div>
-      <Modal
-        title="Xác nhận mua hàng."
-        open={isModalOpen}
-        onOk={() => buyProduct()}
-        onCancel={handleCancel}
-        visible={isModalOpen}
-      >
-        <p>Bạn có muốn mua đơn hàng này không.</p>
-      </Modal>
+      {user ? (
+        <Modal
+          title="Xác nhận mua hàng."
+          open={isModalOpen}
+          onOk={() => buyProduct()}
+          onCancel={handleCancel}
+          visible={isModalOpen}
+        >
+          <p>Bạn có muốn mua đơn hàng này không.</p>
+        </Modal>
+      ) : (
+        <Modal
+          footer={null}
+          title="Thông tin đơn hàng."
+          open={isModalOpen}
+          visible={isModalOpen}
+        >
+          <form action="">
+            <div className="flex gap-6 justify-between">
+              <label htmlFor="">Họ và tên: </label>
+              <input
+                type="text"
+                name="fullName"
+                className="border block w-4/6"
+                onChange={(e) => handleInfoGuest(e)}
+              />
+            </div>
+            <div
+              className="text-red-500 h-9 text-right"
+              style={{ fontSize: "14px" }}
+            >
+              {invalidFullName ? "Họ và tên là bắt buộc." : ""}
+            </div>
+            <div className="flex gap-6  justify-between">
+              <label htmlFor="">Địa chỉ </label>
+              <input
+                name="addressDetail"
+                type="text"
+                className="border block w-4/6"
+                onChange={(e) => handleInfoGuest(e)}
+              />
+            </div>
+            <div
+              className="text-red-500 h-9 text-right"
+              style={{ fontSize: "14px" }}
+            >
+              {invalidAddress ? "Địa chỉ là bắt buộc." : ""}
+            </div>
+
+            <div className="flex gap-6  justify-between">
+              <label htmlFor="">Số điện thoại:</label>
+              <input
+                type="text"
+                name="phone"
+                className="border block w-4/6"
+                onChange={(e) => handleInfoGuest(e)}
+              />
+            </div>
+            <div
+              className="text-red-500 h-9 text-right"
+              style={{ fontSize: "14px" }}
+            >
+              {invalidPhone ? "Số điện thoại không hợp lệ." : ""}
+            </div>
+
+            <div className="flex justify-around">
+              <Button onClick={buyProduct}>Mua hàng</Button>
+              <Button onClick={closeModalGuest}>Hủy bỏ</Button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
       <ToastContainer />
       <div className="flex items-center mb-7">
         <Button onClick={redirectBill}>Hóa đơn của tôi</Button>

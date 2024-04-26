@@ -13,7 +13,6 @@ function MyBill() {
   const [bills, setBills] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [billDelete, setBillDelete] = useState(null);
-  console.log("🚀 ~ MyBill ~ billDelete:", billDelete);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -16,6 +16,9 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -125,6 +128,18 @@ public class BillBuyController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+    @PutMapping("/received")
+    public ResponseEntity<Boolean> receivedBill(@RequestBody Long id) {
+        try {
+            Bill bill = billRepo.findById(id).get();
+            bill.setReceived(true);
+            billRepo.save(bill);
+            return ResponseEntity.ok(true);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+
     @Transactional
      @DeleteMapping("/delete")
         public ResponseEntity<Boolean> deleteBill(@RequestParam("id") Long id) {
@@ -169,6 +184,7 @@ public class BillBuyController {
                 document.add(new Paragraph("Don gia: " + buy.getPrice()));
 
             }
+            document.add(new Paragraph("Ngay: " + bills.getCreatedAt()));
             document.add(new Paragraph("Tong cong: " +bills.getSum()));
             document.close();
         } catch (DocumentException e) {
