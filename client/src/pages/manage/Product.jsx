@@ -28,7 +28,7 @@ function Product() {
   const dispatch = useDispatch();
 
   const [current, setCurrent] = useState(1);
-  const limit = 12;
+  const limit = 16;
   const { products, count, productSearch, loading } = useSelector(
     (state) => state.product
   );

@@ -17,7 +17,6 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
 
   const dispatch = useDispatch();
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
     if (product) {
       try {
         const fileExtension = data?.image[0].name
@@ -35,6 +34,8 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
           formData.append("productId", product.pid);
           await uploadFile.uploadProduct(formData);
           toast("Cập nhật  sản phẩm thành công");
+          reset();
+          closeForm();
         }
       } catch (error) {
         console.log("🚀 ~ onSubmit ~ error:", error);
@@ -62,6 +63,7 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
           console.log("🚀 ~ onSubmit ~  user?.userId:", user.userId);
           reset();
           dispatch(getProductByUserId({ limit, page, useId: user.userId }));
+          closeForm();
         }
       } catch (error) {
         console.log("🚀 ~ onSubmit ~ error:", error);
