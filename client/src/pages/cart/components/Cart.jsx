@@ -162,7 +162,7 @@ function Cart() {
       style={{ minHeight: "50vh" }}
     >
       <div className="col-span-3  p-4">
-        <h3 className="text-blue-400">Sản phẩm quan tâm</h3>
+        <h3 className="text-red-500 text-4xl font-bold">Sản phẩm quan tâm</h3>
         <table className="table-auto w-full">
           <thead>
             <tr>
