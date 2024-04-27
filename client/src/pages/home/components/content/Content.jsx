@@ -49,7 +49,7 @@ function Content() {
               />
             </div>
           ) : (
-            <div>
+            <div style={{ width: "80%" }}>
               <h2 className="font-bold  text-yellow-yody text-4xl   mb-4">
                 HÀNG MỚI VỀ
               </h2>
