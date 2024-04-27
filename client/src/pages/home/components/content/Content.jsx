@@ -55,7 +55,7 @@ function Content() {
               </h2>
               <div className="grid-container">
                 {products?.map((item, index) => {
-                  if (index > 4) {
+                  if (index > 4 && index < 9) {
                     return (
                       <ProductItem
                         key={item.pid}
