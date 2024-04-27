@@ -89,11 +89,11 @@ function Home() {
       <Row>
         <Col span={12}>
           <LineChart data={dataQty} />
-          <div className="text-center">Số lượng bán : {sumQty}</div>
+          <div className="text-center">Tổng số lượng bán : {sumQty}</div>
         </Col>
         <Col span={12}>
           <LineChart data={dataRevenue} />
-          <div className="text-center">Số lượng bán : {sumRevenue}vnd</div>
+          <div className="text-center">Tổng doanh thu: {sumRevenue}vnd</div>
         </Col>
       </Row>
     </div>

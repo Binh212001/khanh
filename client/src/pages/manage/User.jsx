@@ -22,7 +22,7 @@ function Users() {
     setIsModalOpen(false);
   };
 
-  const limit = 12;
+  const limit = 16;
   const { userList, count, userSearch, loading } = useSelector(
     (state) => state.auth
   );

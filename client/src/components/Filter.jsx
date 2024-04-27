@@ -57,16 +57,6 @@ const Filter = () => {
           );
         })}
       </div>
-      <div className="mt-2">
-        <div className="flex gap-3 align-middle items-center ">
-          <h4>Xắp xếp</h4>
-          <select className="block bg-btn-filter  p-2 ">
-            <option value=""></option>
-            <option value="asc">Tăng dần</option>
-            <option value="dasc">Giảm dần</option>
-          </select>
-        </div>
-      </div>
     </div>
   );
 };

@@ -150,7 +150,7 @@ public class ProductServiceImpl implements  ProductService {
         for (String id : ids){
             try {
                 Optional<Product> p = productRepo.findById(id);
-                p.get().setActive(false);
+                p.get().setActive(!p.get().isActive());
                 productRepo.save(p.get());
             }
             catch (Exception e){
