@@ -3,6 +3,7 @@ import Auth from "../pages/auth/Auth";
 import UpdateUser from "../pages/auth/UpdateUser.jsx";
 import Cart from "../pages/cart/components/Cart";
 import MyBill from "../pages/cart/components/MyBill.jsx";
+import Category from "../pages/category/Category.jsx";
 import Ao from "../pages/category/ao/Ao";
 import Quan from "../pages/category/quan/Quan";
 import Shose from "../pages/category/shose/Shose.jsx";
@@ -30,6 +31,11 @@ const routes = [
   {
     path: routeConfig.productdetail,
     element: <ProductDetail />,
+    layout: "layout",
+  },
+  {
+    path: routeConfig.category,
+    element: <Category/>,
     layout: "layout",
   },
   {
