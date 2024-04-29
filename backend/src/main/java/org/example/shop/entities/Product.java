@@ -26,9 +26,9 @@ public class Product {
     private Account seller;
     private  boolean active ;
     @Column(nullable = true)
-    private  boolean hot ;
+    private  Boolean hot ;
     @Column(nullable = true)
-    private  boolean newProduct ;
+    private  Boolean newProduct ;
     @PrePersist
     protected void onCreate() {
         active = true;

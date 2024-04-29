@@ -60,7 +60,7 @@ function Content() {
                         key={item.pid}
                         data={item}
                         hot={false}
-                        newProduct={item.newProduct}
+                        newProduct={item?.newProduct}
                       />
                     );
                   }
@@ -75,7 +75,7 @@ function Content() {
                 {products?.map((item, index) => {
                   if (item.hot) {
                     return (
-                      <ProductItem key={item.pid} data={item} hot={item.hot} />
+                      <ProductItem key={item.pid} data={item} hot={item?.hot} newProduct={item?.newProduct} />
                     );
                   }
                   return null;
