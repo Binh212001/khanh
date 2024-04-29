@@ -4,18 +4,20 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Avatar, Dropdown, Menu } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/img/logo.webp";
 import CustomLink from "../../Link/CustomLink";
-import { listMenu } from "./MenuList";
+
 import useDebounce from "./useDebounce";
 import { logout } from "../../../redux/AuthSlice";
+import CategoryRest from "../../../api/CategoryRest";
 
 function Header() {
   const [keySearch, setKeySearch] = useState("");
   const debounceInput = useDebounce(keySearch, 500);
+  const [category , setCategory]= useState([])
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -23,6 +25,16 @@ function Header() {
     setKeySearch(e.target.value);
   };
 
+  useEffect(()=>{
+    const  fetchCategory= async()=>{
+      try {
+        const data = await CategoryRest.getAll()
+        setCategory(data)
+      } catch (error) {
+      }
+      }
+      fetchCategory()
+    },[])
   const handleClickSearch = () => {
     navigate("/product/search/" + keySearch);
   };
@@ -120,10 +132,11 @@ function Header() {
 
       <nav className="flex justify-center mt-6">
         <ul className="flex justify-between w-[500px] mb-10 ">
-          {listMenu.map((link, index) => {
+          {category.map((link, index) => {
+            console.log(link)
             return (
-              <CustomLink to={`/category${link.to}`} key={index}>
-                {link.displayName}
+              <CustomLink to={`/category/${link.categoryId}`} key={index}>
+                {link.title}
               </CustomLink>
             );
           })}

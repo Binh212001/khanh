@@ -27,7 +27,7 @@ public class Bill {
     private String address;
 
 
-    private Boolean received;
+    private boolean received;
     @Column(name = "created_at")
     private Date createdAt;
 

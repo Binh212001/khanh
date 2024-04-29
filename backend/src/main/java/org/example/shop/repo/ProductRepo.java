@@ -23,8 +23,8 @@ public interface ProductRepo extends JpaRepository<Product, String> {
     @Query(value = "select * from products where products.user_id = :userId", nativeQuery = true)
 
     List<Product> getProductBySeller(Pageable pageable , String userId);
-    @Query(value = "select * from products where products.category = :category and products.active=true", nativeQuery = true)
-    List<Product> getByCategory(Pageable pageable , String category);
+    @Query(value = "select * from products where products.category_category_id = :id and products.active=true", nativeQuery = true)
+    List<Product> getByCategory(Pageable pageable , Long id);
 
     long count();
 

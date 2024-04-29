@@ -1,13 +1,19 @@
-import React from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Modal } from "antd";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import CategoryRest from "../../api/CategoryRest";
 import productRest from "../../api/ProductRest";
 import uploadFile from "../../api/UploadFile";
 import { getProductByUserId } from "../../redux/productAction";
 
 function ProductForm({ mode, product, closeForm, page, limit }) {
   const { user } = useSelector((state) => state.auth);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [title , setTitle] =useState ("")
+  const [category , setCategory]= useState([])
   const {
     register,
     handleSubmit,
@@ -15,6 +21,20 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
     formState: { errors },
   } = useForm();
 
+  useEffect(()=>{
+  const  fetchCategory= async()=>{
+    try {
+      const data = await CategoryRest.getAll()
+      setCategory(data)
+    } catch (error) {
+    }
+    }
+    fetchCategory()
+  },[])
+
+  const handleChangeTitle =(e)=>{
+    setTitle(e.target.value)
+  }
   const dispatch = useDispatch();
   const onSubmit = async (data) => {
     if (product) {
@@ -52,7 +72,7 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
         ) {
           toast("Định dạng file phải  là png, jpg, jpeg, gif, webp, tiff");
         } else {
-          await productRest.create({ ...data, id, sellerId: user.userId });
+          await productRest.create({ ...data, category: Number(data.category) , id, sellerId: user.userId });
           const formData = new FormData();
           formData.append("file", data.image[0]);
           formData.append("productId", id);
@@ -60,7 +80,6 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
           setTimeout(() => {
             toast("Thêm sản phẩm thành công");
           }, 300);
-          console.log("🚀 ~ onSubmit ~  user?.userId:", user.userId);
           reset();
           dispatch(getProductByUserId({ limit, page, useId: user.userId }));
           closeForm();
@@ -70,6 +89,27 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
       }
     }
   };
+
+  const closeModal = ()=>{
+    setIsModalOpen(false)
+  }
+
+  const addCategory = async (e)=>{
+    e.preventDefault();
+    try {
+      const success = await CategoryRest.create(title);
+      if(success){
+        toast("Thêm danh mục thành công");
+        setTitle("")
+      }else{
+        toast(`Danh mục [${title}] đã tồn tại rồi.`);
+      }
+      setIsModalOpen(false)
+    } catch (error) {
+      toast("Server error")
+    }
+
+  }
   return (
     <div className=" mx-auto bg-white p-8 rounded-md shadow-md  mb-5">
       <ToastContainer />
@@ -208,11 +248,17 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
             {...register("category")}
             id="category"
           >
-            <option value="quan">Quần</option>
-            <option value="ao">Áo</option>
-            <option value="vay">Váy</option>
-            <option value="giaydep">Giày dép</option>
+            
+            {
+              category.map((d , index)=> { 
+                if (index = 0){
+                  return <option selected key={d.categoryId} value={d.categoryId} >{d.title} </option>
+                }
+              return <option key={d.categoryId} value={d.categoryId} >{d.title} </option>})
+            }
+            
           </select>
+          <PlusOutlined onClick={()=>setIsModalOpen(true)} />
         </div>
         <div>
           <label
@@ -239,6 +285,32 @@ function ProductForm({ mode, product, closeForm, page, limit }) {
           </button>
         </div>
       </form>
+      <Modal
+          footer={null}
+          title="Thêm danh mục."
+          open={isModalOpen}
+          visible={isModalOpen}
+        >
+          <form onSubmit={addCategory}>
+          <label
+            htmlFor="title"
+            className="block text-xl font-medium text-gray-700"
+          >
+           Tên danh mục
+          </label>
+          <input
+            type="text"
+            id="title"
+            onChange={(e)=>handleChangeTitle(e)}
+            className="mt-1 outline-none p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-md sm:text-xl border-gray-300 rounded-md"
+          />
+            
+            <div className="flex justify-around mt-3">
+              <Button htmlType="submit">Thêm</Button>
+              <Button onClick={closeModal}>Hủy bỏ</Button>
+            </div>
+          </form>
+        </Modal>
     </div>
   );
 }

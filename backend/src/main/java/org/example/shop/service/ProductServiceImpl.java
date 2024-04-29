@@ -1,17 +1,11 @@
 package org.example.shop.service;
 
 import jakarta.transaction.Transactional;
-import org.example.shop.entities.Account;
-import org.example.shop.entities.Color;
-import org.example.shop.entities.Product;
-import org.example.shop.entities.Size;
+import org.example.shop.entities.*;
 import org.example.shop.models.AccountModel;
 import org.example.shop.models.ProductModel;
 import org.example.shop.models.TopSellingProductDTO;
-import org.example.shop.repo.AccountRepo;
-import org.example.shop.repo.ColorRepo;
-import org.example.shop.repo.ProductRepo;
-import org.example.shop.repo.SizeRepo;
+import org.example.shop.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +27,8 @@ public class ProductServiceImpl implements  ProductService {
     SizeRepo sizeRepo;
     @Autowired
     ColorRepo colorRepo;
+    @Autowired
+    CategoryRepo categoryRepo;
 
     public  AccountModel mapToModel (Account account){
         return  AccountModel.builder()
@@ -79,7 +75,8 @@ public class ProductServiceImpl implements  ProductService {
             product.setDescription(p.getDescription());
             product.setPrice(p.getPrice());
             product.setSeller(user.get());
-            product.setCategory(p.getCategory());
+            Optional<Category> c =  categoryRepo.findById(p.getCategory());
+            product.setCategory(c.get());
             List<Color>  colors = colorRepo.findByCidIn(p.getColor());
             List<Size> sizes = sizeRepo.findBySidIn(p.getSize());
             product.setColor(colors);
@@ -103,6 +100,8 @@ public class ProductServiceImpl implements  ProductService {
             product.get().setDescription(p.getDescription());
             product.get().setPrice(p.getPrice());
             product.get().setColor(colors);
+            Optional<Category> c =  categoryRepo.findById(p.getCategory());
+            product.get().setCategory(c.get());
             product.get().setSize(sizes);
             productRepo.save(product.get());
         }catch (Exception e){
@@ -130,10 +129,10 @@ public class ProductServiceImpl implements  ProductService {
     }
 
     @Override
-    public List<Product> getProductByCategory( int page, int limit,String category) throws Exception {
+    public List<Product> getProductByCategory( int page, int limit,Long id) throws Exception {
         try {
             Pageable pageable = PageRequest.of(page, limit);
-            return  productRepo.getByCategory(pageable,category);
+            return  productRepo.getByCategory(pageable,id);
         }catch (Exception e){
             throw  new Exception(e.getMessage());
         }
