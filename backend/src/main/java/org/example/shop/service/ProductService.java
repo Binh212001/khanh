@@ -18,7 +18,7 @@ public interface ProductService {
 
     List<Product> getProductBySeller(int page, int limit, String userId) throws Exception;
 
-    List<Product> getProductByCategory( int page, int limit,String category) throws Exception;
+    List<Product> getProductByCategory( int page, int limit,Long id) throws Exception;
     long getCount ();
 
     void stopSale(List<String> ids);

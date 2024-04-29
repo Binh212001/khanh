@@ -14,5 +14,5 @@ public class ProductModel {
     private List<String> size;
     private List<String> color;
     private String sellerId;
-    private String category;
+    private Long category;
 }
