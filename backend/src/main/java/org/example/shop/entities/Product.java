@@ -25,7 +25,9 @@ public class Product {
     @JoinColumn(name = "userId")
     private Account seller;
     private  boolean active ;
+    @Column(nullable = true)
     private  boolean hot ;
+    @Column(nullable = true)
     private  boolean newProduct ;
     @PrePersist
     protected void onCreate() {
