@@ -11,7 +11,6 @@ function Content() {
   const limit = 16;
   const dispatch = useDispatch();
   const { products, count, loading } = useSelector((state) => state.product);
-  console.log("🚀 ~ Content ~ loading:", loading);
 
   useEffect(() => {
     dispatch(
@@ -55,13 +54,13 @@ function Content() {
               </h2>
               <div className="grid-container">
                 {products?.map((item, index) => {
-                  if (index > 4 && index < 9) {
+                  if (item.newProduct) {
                     return (
                       <ProductItem
                         key={item.pid}
                         data={item}
-                        hot={true}
-                        newProduct={true}
+                        hot={false}
+                        newProduct={item.newProduct}
                       />
                     );
                   }
@@ -74,9 +73,9 @@ function Content() {
               </h2>
               <div className="grid-container">
                 {products?.map((item, index) => {
-                  if (index < 4) {
+                  if (item.hot) {
                     return (
-                      <ProductItem key={item.pid} data={item} hot={true} />
+                      <ProductItem key={item.pid} data={item} hot={item.hot} />
                     );
                   }
                   return null;
