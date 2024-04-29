@@ -87,7 +87,7 @@ function Content() {
               </h2>
               <div className="grid-container">
                 {products?.map((item, index) => (
-                  <ProductItem key={item.pid} data={item} hot={false}  hot={item?.hot} newProduct={item?.newProduct}/>
+                  <ProductItem key={item.pid} data={item} hot={item?.hot} newProduct={item?.newProduct}/>
                 ))}
               </div>
             </div>
