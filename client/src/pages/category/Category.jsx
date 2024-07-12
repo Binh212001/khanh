@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Filter from "../../../components/Filter";
-import ProductItem from "../../../components/product/ProductItem";
-import { getProductByCategory } from "../../../redux/productAction";
-function Shose() {
+import { getProductByCategory } from "../../redux/productAction";
+import Filter from "../../components/Filter";
+import ProductItem from "../../components/product/ProductItem";
+import { useParams } from "react-router-dom";
+
+
+function Category() {
   const dispatch = useDispatch();
+  const {id} = useParams()
+
   useEffect(() => {
-    dispatch(getProductByCategory({ page: 0, limit: 24, category: "giaydep" }));
-  }, [dispatch]);
+    dispatch(getProductByCategory({ page: 0, limit: 24, category: Number(id) }));
+  }, [dispatch , id]);
 
   const { products } = useSelector((state) => state.product);
 
@@ -27,6 +32,7 @@ function Shose() {
           <div style={{ width: "80%" }} className="grid-container">
             {products?.map((item, index) => (
               <ProductItem key={item.pid} data={item} />
+
             ))}
           </div>
         </div>
@@ -35,4 +41,4 @@ function Shose() {
   );
 }
 
-export default Shose;
+export default Category;

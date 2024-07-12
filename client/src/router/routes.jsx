@@ -3,10 +3,7 @@ import Auth from "../pages/auth/Auth";
 import UpdateUser from "../pages/auth/UpdateUser.jsx";
 import Cart from "../pages/cart/components/Cart";
 import MyBill from "../pages/cart/components/MyBill.jsx";
-import Ao from "../pages/category/ao/Ao";
-import Quan from "../pages/category/quan/Quan";
-import Shose from "../pages/category/shose/Shose.jsx";
-import Vay from "../pages/category/vay/Vay";
+import Category from "../pages/category/Category.jsx";
 import Dashboard from "../pages/home/components/Dashboard";
 import Bill from "../pages/manage/Bill.jsx";
 import Home from "../pages/manage/Home";
@@ -33,35 +30,23 @@ const routes = [
     layout: "layout",
   },
   {
-    path: routeConfig.ao,
-    element: <Ao />,
+    path: routeConfig.category,
+    element: <Category/>,
     layout: "layout",
   },
-  {
-    path: routeConfig.shose,
-    element: <Shose />,
-    layout: "layout",
-  },
+
   {
     path: routeConfig.updateUser,
     element: <UpdateUser />,
     layout: "layout",
   },
-  {
-    path: routeConfig.quan,
-    element: <Quan />,
-    layout: "layout",
-  },
+
   {
     path: routeConfig.myBill,
     element: <MyBill />,
     layout: "layout",
   },
-  {
-    path: routeConfig.vay,
-    element: <Vay />,
-    layout: "layout",
-  },
+
   {
     path: routeConfig.search,
     element: <Search />,

@@ -120,9 +120,9 @@ public class ProductController {
 
     @GetMapping("/category")
     public ResponseEntity<Response<List<Product>>> getByCategory(@RequestParam("page") int page , @RequestParam("limit") int limit ,
-                                                           @RequestParam("category") String category){
+                                                           @RequestParam("category") Long id){
         try {
-            List<Product> p =  productService.getProductByCategory(page, limit,category);
+            List<Product> p =  productService.getProductByCategory(page, limit,id);
             long count = productService.getCount();
             return  ResponseEntity.status(HttpStatus.OK).body(new Response<List<Product>>( count,p,"Ok"));
         }catch (Exception e){

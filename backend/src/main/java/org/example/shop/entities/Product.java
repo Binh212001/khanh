@@ -15,7 +15,8 @@ public class Product {
     private double price;
     private String description;
     private String image;
-    private String category;
+    @ManyToOne
+    private Category category;
     @ManyToMany
     private List<Size> size;
     @ManyToMany
@@ -24,6 +25,10 @@ public class Product {
     @JoinColumn(name = "userId")
     private Account seller;
     private  boolean active ;
+    @Column(nullable = true)
+    private  Boolean hot ;
+    @Column(nullable = true)
+    private  Boolean newProduct ;
     @PrePersist
     protected void onCreate() {
         active = true;
